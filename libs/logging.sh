@@ -24,6 +24,10 @@ function log_msg {
     local msg prefix
     msg="${1}"
     if [ "$(get_param sonar persistant_log)" == "true" ]; then
+        # make sure file exists
+        if [ ! -f "${SNR_LOG_PATH}" ]; then
+            touch "${SNR_LOG_PATH}"
+        fi
         prefix="$(date +'[%D %T]') sonar:"
         echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
     fi
