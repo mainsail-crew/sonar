@@ -150,8 +150,10 @@ function keepalive {
     else
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
         log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD} seconds."
-        sudo ifconfig wlan0 down
+        ifconfig wlan0 down
         sleep "${SONAR_RESTART_TRESHOLD}"
-        sudo ifconfig wlan0 up
+        ifconfig wlan0 up
+        log_msg "Waiting 10 seconds to reestablish connection."
+        sleep 10
     fi
 }
