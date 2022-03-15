@@ -27,7 +27,7 @@ You are able to configure it's behavior due a file in "klipper_config".\
 Easiest way is to copy the file from "sample_config" in this repo.
 
     cd ~/sonar
-    cp sample_config/sonar.conf ../klipper_config/ \
+    cp sample_config/sonar.conf ../klipper_config/
 
 ### Options
 
