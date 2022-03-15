@@ -107,12 +107,12 @@ function compare_files {
 
 # Copy Files funcs
 function copy_service {
-    local servicefile template origin
+    local template origin
     origin="/etc/systemd/system/sonar.service"
     template="${PWD}/file_templates/sonar.service"
     if [ "$(compare_files "${origin}" "${template}")" -eq 1 ]; then
         echo -en "Copying sonar.service file ...\r"
-        sudo cp -rf "${servicefile}" "${origin}" > /dev/null
+        sudo cp -rf "${template}" "${origin}" > /dev/null
         echo -e "Copying sonar.service file ... [OK]\r"
         daemon_reload
     else
