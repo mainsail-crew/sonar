@@ -88,6 +88,8 @@ function initial_check {
 function check_eth_con {
     if [ "$(cat /sys/class/net/eth0/operstate)" == "up" ]; then
         log_msg "WARN: Connected via ethernet, please disable service ..."
+        log_msg "Stopping sonar.service till next reboot ..."
+        systemctl stop sonar.service
     fi
 }
 
