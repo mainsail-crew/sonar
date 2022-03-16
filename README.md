@@ -58,6 +58,19 @@ Sets interval in seconds, how long it should wait for next connection check.
 
 The last option is a delay, in seconds, between shutdown WiFi Interface and bring it up again.
 
+### Updating via monnraker's update manager
+
+Simply add
+
+    [update_manager sonar]
+    type: git_repo
+    path: ~/sonar
+    origin: https://github.com/KwadFan/sonar.git
+    primary_branch: main
+    is_system_service: True
+
+to your moonraker.conf
+
 That's it. It is'nt the best method to keep your Wifi up and running but it is the easiest solution without changing firmware files or similar.
 
 I hope you will find sonar useful and it blows away your connection losts :)
