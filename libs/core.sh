@@ -48,8 +48,11 @@ function shutdown {
 ## Sanity Checks
 # Check for config file
 function check_cfg {
-    if [ -f "${SONAR_CFG}" ] ||
-    [ -f "${BASE_USER_HOME}/klipper_config/sonar.conf" ]; then
+    local config
+    config="${BASE_USER_HOME}/klipper_config/sonar.conf"
+    if [ -z "${SONAR_CFG}" ] &&
+    [ -f "${config}" ]; then
+        SONAR_CFG="${config}"
         log_msg "INFO: Found config file ${SONAR_CFG}, import settings."
         print_cfg
         setup_user_conf
@@ -153,7 +156,7 @@ function keepalive {
         ifconfig wlan0 down
         sleep "${SONAR_RESTART_TRESHOLD}"
         ifconfig wlan0 up
-        log_msg "Waiting 10 seconds to reestablish connection."
+        log_msg "Waiting 10 seconds to re-establish connection."
         sleep 10
     fi
 }
