@@ -44,7 +44,7 @@ and it's _not_ persistant!
     target: auto
 
 Your target defines which of your network devices should be target of used 'ping' command \
-You can use either IP Address or a URL. 'auto' will ping your default gateway (router).
+You can use either IP Address or a URL. 'auto' will ping your default gateway (router).\
 **_INFO: Avoid using prefixes like https:// or http://_**
 
     count: 3
