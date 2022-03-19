@@ -26,7 +26,7 @@ check_install_pkgs ${SONAR_SONAR_DEPS}
 pushd /home/${BASE_USER} &> /dev/null || exit 1
     # clone Repo
     echo_green "Clone sonar repository ..."
-    gitclone SONAR_SONAR_REPO_SHIP sonar
+    gitclone SONAR_SONAR_REPO sonar
     # install sonar
     pushd /home/${BASE_USER}/sonar &> /dev/null || exit 1
     echo_green "Running sonar installer ..."
