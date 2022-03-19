@@ -1,0 +1,15 @@
+#!/bin/bash
+#### Sonar - A WiFi Keepalive daemon
+####
+#### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
+#### Copyright 2022
+#### https://github.com/mainsail-crew/sonar
+####
+#### This File is distributed under GPLv3
+####
+# shellcheck disable=all
+
+# Sonar
+[ -n "$SONAR_SONAR_REPO_SHIP" ] || SONAR_SONAR_REPO_SHIP=https://github.com/KwadFan/sonar.git
+[ -n "$SONAR_SONAR_REPO_BRANCH" ] || SONAR_SONAR_REPO_BRANCH=main
+[ -n "$SONAR_SONAR_DEPS" ] || SONAR_SONAR_DEPS="git crudini iputils-ping"
