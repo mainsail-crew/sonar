@@ -24,7 +24,7 @@ A small Keepalive daemon for MainsailOS (or any other Raspberry Pi OS based Imag
 ## Configuration
 
 You are able to configure it's behavior due a file in "klipper_config".\
-But you don't have to. Defaults are hardcoded and sonar will run without any configuration.
+But you don't have to. Defaults are hardcoded and sonar will run without any configuration.\
 Easiest way is to copy the file from "sample_config" in this repo.
 
     cd ~/sonar
