@@ -58,7 +58,7 @@ Sets interval in seconds, how long it should wait for next connection check.
 
 The last option is a delay, in seconds, between shutdown WiFi Interface and bring it up again.
 
-### Updating via monnraker's update manager
+### Updating via moonraker's update manager
 
 Simply add
 
