@@ -60,6 +60,7 @@ if [ "$#" -ne 0 ]; then
     done
 fi
 
+disable_service
 init_log_entry
 initial_check
 while true; do
