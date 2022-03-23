@@ -70,6 +70,7 @@ function ask_uninstall {
             sudo echo -e "\nPlease enter your password!"
             uninstall_sonar
             remove_logrotate
+            remove_log_ln
             goodbye_msg
         else
             echo -e "\nYou answered '${remove}'! Uninstall will be aborted..."
@@ -103,6 +104,14 @@ function remove_logrotate {
     echo -en "Removing Logrotate Rule ...\r"
     sudo rm -f /etc/logrotate.d/sonar
     echo -e "Removing Logrotate Rule ... [OK]"
+}
+
+function remove_log_ln {
+    local get_path
+    get_path="$(find /home/ -name "klipper_logs")"
+    if [ -h "${get_path}/sonar.log" ]; then
+        rm -f /var/log/sonar.log "${get_path}/sonar.log"
+    fi
 }
 
 #### MAIN

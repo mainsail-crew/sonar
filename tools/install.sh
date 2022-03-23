@@ -98,6 +98,10 @@ function install_sonar {
     echo -en "Copying logrotate file ...\r"
     sudo cp -rf "${logrotatefile}" /etc/logrotate.d/sonar
     echo -e "Copying logrotate file ... [OK]\r"
+    ## Link sonar.log to klipper_logs
+    echo -en "Linking sonar.log ...\r"
+    sudo ln -sf /var/log/sonar.log "${HOME}/klipper_logs/sonar.log" > /dev/null
+    echo -e "Linking sonar.log ... [OK]\r"
     echo -en "Reload systemd to enable new deamon ...\r"
     sudo systemctl daemon-reload
     echo -e "Reload systemd to enable new daemon ... [OK]"

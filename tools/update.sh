@@ -133,12 +133,21 @@ function copy_logrotate {
     fi
 }
 
+function create_log_ln {
+    local get_path
+    get_path="$(find /home/ -name "klipper_logs")"
+    if [ ! -h "${get_path}/sonar.log" ]; then
+        ln -sf /var/log/sonar.log "${get_path}/sonar.log"
+    fi
+}
+
 #### MAIN
 install_cleanup_trap
 welcome_msg
 stop_sonar
 copy_service
 copy_logrotate
+create_log_ln
 start_sonar
 goodbye_msg
 exit 0
