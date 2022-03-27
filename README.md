@@ -71,7 +71,7 @@ Simply add
     [update_manager sonar]
     type: git_repo
     path: ~/sonar
-    origin: https://github.com/KwadFan/sonar.git
+    origin: https://github.com/mainsail-crew/sonar.git
     primary_branch: main
     is_system_service: True
 
