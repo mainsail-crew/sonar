@@ -6,7 +6,7 @@ A small Keepalive daemon for MainsailOS (or any other Raspberry Pi OS based Imag
 
 ## Install
 
-    git clone https://github.com/mainsail-crew/sonar
+    git clone https://github.com/mainsail-crew/sonar.git
     cd ~/sonar
     make install
 
