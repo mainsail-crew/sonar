@@ -46,12 +46,13 @@ function shutdown {
 }
 
 # Service disabled by user
-function disable_service {
-    local config disable
+function enable_service {
+    local config service
     config="${BASE_USER_HOME}/klipper_config/sonar.conf"
-    disable="$(get_param sonar disable_service)"
-    if [ -f "${config}" ] && [ "${disable}" == "true" ]; then
+    service="$(get_param sonar enable)"
+    if [ -f "${config}" ] && [ "${service}" == "false" ]; then
         log_msg "Sonar.service disabled by user configuration"
+        log_msg "Service will be halted until next reboot"
         systemctl stop sonar.service
     fi
 }
@@ -93,6 +94,7 @@ function initial_check {
     check_dep "logger"
     check_cfg
     check_eth_con
+    enable_service
 }
 
 # Check if eth0 is used.

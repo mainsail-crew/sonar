@@ -32,10 +32,10 @@ Easiest way is to copy the file from "sample_config" in this repo.
 
 ### Options
 
-    disable_service: false
+    enable: true
 
-If set to "true" service will exit on startup, use this option to disable Sonar service. \
-It will restart on reboot but exiting as long you don't change it to false.
+If set to "false" service will exit on startup, use this option to disable Sonar service. \
+It will restart on reboot but exiting as long you don't change it to "true".
 
     persistant_log: false
 
@@ -56,7 +56,7 @@ You can use either IP Address or a URL. 'auto' will ping your default gateway (r
 
 How often should be pinged?
 
-    interval: 5
+    interval: 60
 
 Sets interval in seconds, how long it should wait for next connection check.
 
