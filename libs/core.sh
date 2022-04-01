@@ -118,7 +118,7 @@ function setup_defaults {
     SONAR_TARGET="$(get_def_gw)"
     export SONAR_TARGET
     export SONAR_PING_COUNT="3"
-    export SONAR_CHECK_INTERVAL="5"
+    export SONAR_CHECK_INTERVAL="60"
     export SONAR_RESTART_TRESHOLD="3"
 }
 
