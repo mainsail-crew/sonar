@@ -163,8 +163,10 @@ function check_connection {
 function keepalive {
     local triptime
     triptime="$(check_connection)"
-    if [ -n "${triptime}" ] && [ "$(debug_log)" == "true" ]; then
-        log_msg "Reached ${SONAR_TARGET}, ${triptime}"
+    if [ -n "${triptime}" ]; then
+        if [ "$(debug_log)" == "true" ]; then
+            log_msg "Reached ${SONAR_TARGET}, ${triptime}"
+        fi
     else
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
         log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD} seconds."
