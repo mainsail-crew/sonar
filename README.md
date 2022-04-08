@@ -37,6 +37,11 @@ Easiest way is to copy the file from "sample_config" in this repo.
 If set to "false" service will exit on startup, use this option to disable Sonar service. \
 It will restart on reboot but exiting as long you don't change it to "true".
 
+    debug_log: false
+
+If set to "true" service will log every attempt to reach his target. \
+**_NOTE: That will highly increase log size, this is intended for debugging purposes only._**
+
     persistant_log: false
 
 This option allows you to store a persistant log file "/var/log/sonar.log" if set to "true" \

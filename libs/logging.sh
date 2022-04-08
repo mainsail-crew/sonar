@@ -14,6 +14,10 @@
 # shellcheck enable=require-variable-braces
 
 ## Logging
+function debug_log {
+    get_param sonar debug_log 2> /dev/null || echo "false"
+}
+
 function init_log_entry {
     log_msg "Sonar - A WiFi Keepalive daemon"
     log_msg "Version: $(self_version)"

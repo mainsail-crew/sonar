@@ -121,7 +121,7 @@ function setup_defaults {
     export SONAR_TARGET
     export SONAR_PING_COUNT="3"
     export SONAR_CHECK_INTERVAL="60"
-    export SONAR_RESTART_TRESHOLD="3"
+    export SONAR_RESTART_TRESHOLD="10"
 }
 
 # setup user config
@@ -146,12 +146,12 @@ function setup_user_conf {
     if [ -n "${interval}" ]; then
         export SONAR_CHECK_INTERVAL="${interval}"
     else
-        export SONAR_CHECK_INTERVAL="5"
+        export SONAR_CHECK_INTERVAL="60"
     fi
     if [ -n "${treshold}" ]; then
         export SONAR_RESTART_TRESHOLD="${treshold}"
     else
-        export SONAR_RESTART_TRESHOLD="3"
+        export SONAR_RESTART_TRESHOLD="10"
     fi
 }
 
@@ -163,7 +163,7 @@ function check_connection {
 function keepalive {
     local triptime
     triptime="$(check_connection)"
-    if [ -n "${triptime}" ]; then
+    if [ -n "${triptime}" ] && [ "$(debug_log)" == "true" ]; then
         log_msg "Reached ${SONAR_TARGET}, ${triptime}"
     else
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
