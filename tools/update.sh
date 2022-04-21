@@ -83,8 +83,13 @@ function stop_sonar {
 }
 
 function start_sonar {
-    if [ "$(sudo systemctl is-active sonar.service)" = "active" ]; then
+    if [ "$(sudo systemctl is-active sonar.service)" = "inactive" ]; then
         sudo systemctl start sonar.service &> /dev/null
+    else
+        if [ "$(sudo systemctl is-active sonar.service)" != "active" ]; then
+            echo “sonar.service could not be started”
+            echo “Try running \"sudo systemctl start sonar.service\" manually”
+        fi
     fi
 }
 
