@@ -13,6 +13,9 @@
 
 # shellcheck enable=require-variable-braces
 
+# Exit on Errors
+set -Ee
+
 ## Logging
 function debug_log {
     get_param sonar debug_log 2> /dev/null || echo "false"

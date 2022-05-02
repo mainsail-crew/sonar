@@ -13,6 +13,9 @@
 
 # shellcheck enable=require-variable-braces
 
+# Exit on Errors
+set -Ee
+
 ## Message Helpers
 function wrong_args_msg {
     echo -e "Sonar: Invalid argument!\n"

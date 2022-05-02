@@ -10,6 +10,9 @@
 
 # shellcheck enable=require-variable-braces
 
+# Exit on Errors
+set -Ee
+
 ## Version of webcamd
 function self_version {
     pushd "${BASE_SNR_PATH}" &> /dev/null || exit 1
@@ -99,7 +102,8 @@ function initial_check {
 
 # Check if eth0 is used.
 function check_eth_con {
-    if [ "$(cat /sys/class/net/eth0/operstate)" == "up" ]; then
+    if [ -f "/sys/class/net/eth0/operstate" ] &&
+    [ "$(cat /sys/class/net/eth0/operstate)" == "up" ]; then
         log_msg "WARN: Connected via ethernet, please disable service ..."
         log_msg "Stopping sonar.service till next reboot ..."
         systemctl stop sonar.service

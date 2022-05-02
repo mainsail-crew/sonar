@@ -10,6 +10,8 @@
 
 # shellcheck enable=require-variable-braces
 
+# Exit on Errors
+set -Ee
 
 # Read Configuration File
 # call get_param section param
