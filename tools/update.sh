@@ -10,6 +10,9 @@
 
 # shellcheck enable=requires-variable-braces
 
+# Exit on Error
+set -Ee
+
 # Global Vars
 TITLE="Sonar - A WiFi Keepalive daemon"
 
@@ -83,8 +86,12 @@ function stop_sonar {
 }
 
 function start_sonar {
-    if [ "$(sudo systemctl is-active sonar.service)" = "active" ]; then
-        sudo systemctl start sonar.service &> /dev/null
+    if [ "$(sudo systemctl is-enabled sonar.service)" == "enabled" ]; then
+        if [ "$(sudo systemctl is-active sonar.service)" != "active" ]; then
+            sudo systemctl start sonar.service &> /dev/null
+        else
+            sudo systemctl restart sonar.service &> /dev/null
+        fi
     fi
 }
 
