@@ -29,6 +29,9 @@ help:
 install:
 	@bash -c tools/install.sh
 
+unattended:
+	@bash -c tools/install.sh -z
+
 uninstall:
 	@bash -c tools/uninstall.sh
 
