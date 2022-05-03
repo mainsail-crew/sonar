@@ -121,7 +121,7 @@ function install_sonar {
 
 #### MAIN
 while getopts "z" arg; do
-    case $arg in
+    case ${arg} in
         z)
             UNATTENDED="true"
             ;;
