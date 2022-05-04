@@ -30,6 +30,19 @@ pushd /home/${BASE_USER} &> /dev/null || exit 1
     # install sonar
     pushd /home/${BASE_USER}/sonar &> /dev/null || exit 1
     echo_green "Running sonar installer ..."
-    sudo -u "${BASE_USER}" make install
+    if [ "${SONAR_SONAR_ADD_MOONRAKER}" == "1" ]; then
+        sudo -u "${BASE_USER}" \
+        make unattended
+    else
+        sudo -u "${BASE_USER}" \
+        make install
+    fi
+    if [ ! -d "/home/${BASE_USER}/klipper_config" ]; then
+        mkdir -p "/home/${BASE_USER}/klipper_config"
+    fi
+    echo_green "Copying default config file ..."
+    sudo -u "${BASE_USER}" \
+    cp "${PWD}/sample_config/${SONAR_SONAR_DEFAULT_CONF}" \
+    "/home/${BASE_USER}/klipper_config/sonar.conf"
     popd &> /dev/null || exit 1
 popd &> /dev/null || exit 1
