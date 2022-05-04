@@ -60,4 +60,4 @@ As a pure community-driven project without major corporate backing, we also welc
 
 ## Credits
 
-Thank you to all the people who have already contributed to Mainsail!
+Thank you to all the people who have already contributed to projects of mainsail-crew!
