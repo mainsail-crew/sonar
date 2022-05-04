@@ -45,4 +45,8 @@ pushd /home/${BASE_USER} &> /dev/null || exit 1
     cp "${PWD}/sample_config/${SONAR_SONAR_DEFAULT_CONF}" \
     "/home/${BASE_USER}/klipper_config/sonar.conf"
     popd &> /dev/null || exit 1
+
+# enable systemd service
+systemctl_if_exists enable sonar.service
+
 popd &> /dev/null || exit 1
