@@ -85,3 +85,7 @@ to your moonraker.conf
 That's it. It is'nt the best method to keep your Wifi up and running but it is the easiest solution without changing firmware files or similar.
 
 I hope you will find sonar useful and it blows away your connection losts :)
+
+### Contributing
+
+See [How to contribute?](https://github.com/mainsail-crew/sonar/blob/main/.github/CONTRIBUTING.md)
