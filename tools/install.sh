@@ -12,6 +12,9 @@
 
 ## disabeld SC2086 for some lines because there we want 'word splitting'
 
+# Exit on Errors
+set -Ee
+
 # Global Vars
 TITLE="Sonar - A WiFi Keepalive daemon"
 
@@ -104,7 +107,7 @@ function install_sonar {
     echo -en "Linking sonar.log ...\r"
     sudo ln -sf /var/log/sonar.log "${HOME}/klipper_logs/sonar.log" > /dev/null
     echo -e "Linking sonar.log ... [OK]\r"
-    if [ "${UNATTENDED}" == "false" ]; then
+    if [ "${UNATTENDED}" == "false" ] && [ "$(stat -c %i /)" == "2" ]; then
         echo -en "Reload systemd to enable new deamon ...\r"
         sudo systemctl daemon-reload
         echo -e "Reload systemd to enable new daemon ... [OK]"
@@ -114,7 +117,8 @@ function install_sonar {
     fi
     if [ "${UNATTENDED}" == "true" ]; then
         echo -en "Adding Sonar Update Manager entry to moonraker.conf ...\r"
-        cat "${moonraker_update}" >> "${moonraker_conf}"
+        cat "${moonraker_conf}" "${moonraker_update}" | \
+        tee "${moonraker_conf}" > /dev/null
         echo -e "Adding Sonar Update Manager entry to moonraker.conf ... [OK]"
     fi
 }
@@ -123,6 +127,8 @@ function install_sonar {
 while getopts "z" arg; do
     case ${arg} in
         z)
+            echo -e "Running in UNATTENDED Mode ..."
+            set -x
             UNATTENDED="true"
             ;;
         *)
