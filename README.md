@@ -15,7 +15,20 @@ A small Keepalive daemon for MainsailOS (or any other Raspberry Pi OS based Imag
     cd ~/sonar
     make uninstall
 
-## Update (if needed)
+### Updating via moonraker's update manager
+
+Simply add
+
+    [update_manager sonar]
+    type: git_repo
+    path: ~/sonar
+    origin: https://github.com/mainsail-crew/sonar.git
+    primary_branch: main
+    is_system_service: True
+
+to your moonraker.conf
+
+## Manual Update
 
     cd ~/sonar
     git pull
@@ -69,18 +82,7 @@ Sets interval in seconds, how long it should wait for next connection check.
 
 The last option is a delay, in seconds, between shutdown WiFi Interface and bring it up again.
 
-### Updating via moonraker's update manager
-
-Simply add
-
-    [update_manager sonar]
-    type: git_repo
-    path: ~/sonar
-    origin: https://github.com/mainsail-crew/sonar.git
-    primary_branch: main
-    is_system_service: True
-
-to your moonraker.conf
+---
 
 That's it. It is'nt the best method to keep your Wifi up and running but it is the easiest solution without changing firmware files or similar.
 
