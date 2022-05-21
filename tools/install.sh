@@ -25,7 +25,7 @@ if [ "${UNATTENDED}" == "false" ] && [ ${UID} == '0' ]; then
 fi
 
 ### noninteractive Check
-if [ -z "${DEBIAN_FRONTEND}" ]; then
+if [ "${DEBIAN_FRONTEND}" != "noninteractive" ]; then
     export DEBIAN_FRONTEND=noninteractive
 fi
 
@@ -83,8 +83,6 @@ function install_sonar {
     sonar_bin="${HOME}/sonar/sonar"
     servicefile="${PWD}/file_templates/sonar.service"
     logrotatefile="${PWD}/file_templates/logrotate_sonar"
-    moonraker_conf="${HOME}/klipper_config/moonraker.conf"
-    moonraker_update="${PWD}/file_templates/moonraker_update.txt"
     echo -e "\nInstall Sonar Service ..."
     ## Install Dependencies
     echo -e "Installing 'sonar' Dependencies ..."
@@ -111,16 +109,10 @@ function install_sonar {
         echo -en "Reload systemd to enable new deamon ...\r"
         sudo systemctl daemon-reload
         echo -e "Reload systemd to enable new daemon ... [OK]"
+    fi
         echo -en "Enable sonar.service on boot ...\r"
         sudo systemctl enable sonar.service
         echo -e "Enable sonar.service on boot ... [OK]\r"
-    fi
-    if [ "${UNATTENDED}" == "true" ]; then
-        echo -en "Adding Sonar Update Manager entry to moonraker.conf ...\r"
-        cat "${moonraker_conf}" "${moonraker_update}" | \
-        tee "${moonraker_conf}" > /dev/null
-        echo -e "Adding Sonar Update Manager entry to moonraker.conf ... [OK]"
-    fi
 }
 
 #### MAIN
