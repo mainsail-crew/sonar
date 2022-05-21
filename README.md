@@ -15,7 +15,7 @@ A small Keepalive daemon for MainsailOS (or any other Raspberry Pi OS based Imag
     cd ~/sonar
     make uninstall
 
-### Updating via moonraker's update manager
+## Updating via moonraker's update manager
 
 Simply add
 
