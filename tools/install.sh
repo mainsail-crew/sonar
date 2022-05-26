@@ -105,14 +105,16 @@ function install_sonar {
     echo -en "Linking sonar.log ...\r"
     sudo ln -sf /var/log/sonar.log "${HOME}/klipper_logs/sonar.log" > /dev/null
     echo -e "Linking sonar.log ... [OK]\r"
+    ## Update systemd, if not unattended
     if [ "${UNATTENDED}" == "false" ] && [ "$(stat -c %i /)" == "2" ]; then
         echo -en "Reload systemd to enable new deamon ...\r"
         sudo systemctl daemon-reload
         echo -e "Reload systemd to enable new daemon ... [OK]"
     fi
-        echo -en "Enable sonar.service on boot ...\r"
-        sudo systemctl enable sonar.service
-        echo -e "Enable sonar.service on boot ... [OK]\r"
+    ## enable sonar.service
+    echo -en "Enable sonar.service on boot ...\r"
+    sudo systemctl enable sonar.service
+    echo -e "Enable sonar.service on boot ... [OK]\r"
 }
 
 #### MAIN
