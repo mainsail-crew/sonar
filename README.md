@@ -24,7 +24,7 @@ Simply add
     path: ~/sonar
     origin: https://github.com/mainsail-crew/sonar.git
     primary_branch: main
-    is_system_service: True
+    managed_services: sonar
 
 to your moonraker.conf
 
