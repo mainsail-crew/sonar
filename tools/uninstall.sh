@@ -108,9 +108,9 @@ function remove_logrotate {
 
 function remove_log_ln {
     local get_path
-    get_path="$(find /home/ -name "klipper_logs")"
+    get_path="$(find "${HOME}" -name "sonar.log")"
     if [ -h "${get_path}/sonar.log" ]; then
-        rm -f /var/log/sonar.log "${get_path}/sonar.log"
+        sudo rm -f /var/log/sonar.log "${get_path}"
     fi
 }
 
