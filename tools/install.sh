@@ -17,6 +17,7 @@ set -Ee
 
 # Global Vars
 TITLE="Sonar - A WiFi Keepalive daemon"
+SONAR_PERSISTANT_LOG_PATH=""
 
 ### Non root
 if [ "${UNATTENDED}" == "false" ] && [ ${UID} == '0' ]; then
@@ -87,7 +88,7 @@ function install_sonar {
     ## Install Dependencies
     echo -e "Installing 'sonar' Dependencies ..."
     # shellcheck disable=2086
-    sudo apt install --yes --no-install-recommends crudini > /dev/null
+    sudo apt-get -q install --yes --no-install-recommends crudini > /dev/null
     echo -e "Installing 'sonar' Dependencies ... [OK]"
     ## Link sonar to $PATH
     echo -en "Linking sonar ...\r"
@@ -103,7 +104,7 @@ function install_sonar {
     echo -e "Copying logrotate file ... [OK]\r"
     ## Link sonar.log to klipper_logs
     echo -en "Linking sonar.log ...\r"
-    sudo ln -sf /var/log/sonar.log "${HOME}/klipper_logs/sonar.log" > /dev/null
+    sudo ln -sf /var/log/sonar.log "${SONAR_PERSISTANT_LOG_PATH}/sonar.log" > /dev/null
     echo -e "Linking sonar.log ... [OK]\r"
     ## Update systemd, if not unattended
     if [ "${UNATTENDED}" == "false" ] && [ "$(stat -c %i /)" == "2" ]; then
@@ -117,23 +118,34 @@ function install_sonar {
     echo -e "Enable sonar.service on boot ... [OK]\r"
 }
 
-#### MAIN
-while getopts "z" arg; do
-    case ${arg} in
-        z)
-            echo -e "Running in UNATTENDED Mode ..."
-            set -x
-            UNATTENDED="true"
+main() {
+    while getopts "z" arg; do
+        case ${arg} in
+            z)
+                echo -e "Running in UNATTENDED Mode ..."
+                set -x
+                UNATTENDED="true"
+                ;;
+            *)
+                UNATTENDED="false"
             ;;
-        *)
-            UNATTENDED="false"
-        ;;
-    esac
-done
-install_cleanup_trap
-welcome_msg
-echo -e "Running apt update first ..."
-sudo apt update
-install_sonar
-goodbye_msg
+        esac
+    done
+    if [[ -z "${SONAR_PERSISTANT_LOG_PATH}" ]] && [[ -f "tools/config.local" ]]; then
+        # shellcheck disable=SC1091
+        . tools/config.local
+    fi
+    if [[ -n "${SONAR_PERSISTANT_LOG_PATH}" ]] && [[ ! -f "tools/config.local" ]]; then
+        SONAR_PERSISTANT_LOG_PATH="${HOME}/printer_data/logs"
+    fi
+    install_cleanup_trap
+    welcome_msg
+    echo -e "Running apt update first ..."
+    sudo apt update
+    install_sonar
+    goodbye_msg
+}
+
+#### MAIN
+main
 exit 0

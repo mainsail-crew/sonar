@@ -10,6 +10,21 @@ A small Keepalive daemon for MainsailOS (or any other Raspberry Pi OS based Imag
     cd ~/sonar
     make install
 
+### Install Option
+
+To use a customized path for the persistant Log file, \
+you could create a file called config.local in 'tools' directory
+
+Put a Variable in that file
+
+    SONAR_PERSISTANT_LOG_PATH="/path/to/my/persistant/log/destination"
+
+This will be the path where you find the logfile.
+
+By default, it will be
+
+    /home/<username>/printer_data/logs
+
 ## Uninstall
 
     cd ~/sonar
@@ -28,20 +43,14 @@ Simply add
 
 to your moonraker.conf
 
-## Manual Update
-
-    cd ~/sonar
-    git pull
-    make update
-
 ## Configuration
 
-You are able to configure it's behavior due a file in "klipper_config".\
+You are able to configure it's behavior due a file in "printer_data".\
 But you don't have to. Defaults are hardcoded and sonar will run without any configuration.\
 Easiest way is to copy the file from "sample_config" in this repo.
 
     cd ~/sonar
-    cp sample_config/sonar.conf ../klipper_config/
+    cp sample_config/sonar.conf ../printer_data/config/
 
 ### Options
 
