@@ -8,22 +8,8 @@ A small Keepalive daemon for MainsailOS (or any other Raspberry Pi OS based Imag
 
     git clone https://github.com/mainsail-crew/sonar.git
     cd ~/sonar
-    make install
-
-### Install Option
-
-To use a customized path for the persistant Log file, \
-you could create a file called config.local in 'tools' directory
-
-Put a Variable in that file
-
-    SONAR_PERSISTANT_LOG_PATH="/path/to/my/persistant/log/destination"
-
-This will be the path where you find the logfile.
-
-By default, it will be
-
-    /home/<username>/printer_data/logs
+    make config
+    sudo make install
 
 ## Uninstall
 
@@ -40,17 +26,14 @@ Simply add
     origin: https://github.com/mainsail-crew/sonar.git
     primary_branch: main
     managed_services: sonar
+    install_script: tools/install.sh
 
 to your moonraker.conf
 
 ## Configuration
 
-You are able to configure it's behavior due a file in "printer_data".\
+You are able to configure it's behavior due a file in "printer_data/config/sonar.conf".\
 But you don't have to. Defaults are hardcoded and sonar will run without any configuration.\
-Easiest way is to copy the file from "sample_config" in this repo.
-
-    cd ~/sonar
-    cp sample_config/sonar.conf ../printer_data/config/
 
 ### Options
 

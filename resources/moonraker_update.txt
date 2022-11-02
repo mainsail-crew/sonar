@@ -6,3 +6,4 @@ path: ~/sonar
 origin: https://github.com/mainsail-crew/sonar.git
 primary_branch: main
 managed_services: sonar
+install_script: tools/install.sh

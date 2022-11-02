@@ -1,2 +1,2 @@
-# ignore config.local
-tools/config.local
+# ignore config
+tools/.config

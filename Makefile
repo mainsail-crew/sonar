@@ -7,7 +7,7 @@
 #### This File is distributed under GPLv3
 ####
 
-.PHONY: help install unsinstall update
+.PHONY: config help install uninstall
 
 all: help
 
@@ -23,17 +23,14 @@ help:
 	@echo ""
 	@echo "   install      Installs sonar"
 	@echo "   uninstall    Uninstalls sonar"
-	@echo "   update       Updates sonar (if needed)"
+	@echo "   config       configure installer"
 	@echo ""
+
+config:
+	@bash -c 'tools/configure.sh'
 
 install:
 	@bash -c 'tools/install.sh'
 
-unattended:
-	@bash -c 'tools/install.sh -z'
-
 uninstall:
 	@bash -c 'tools/uninstall.sh'
-
-update:
-	@bash -c 'tools/update.sh'
