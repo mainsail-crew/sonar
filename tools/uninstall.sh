@@ -89,6 +89,7 @@ ask_uninstall() {
     else
         echo -e "\n'sonar' seems not installed."
         echo -e "Exiting. GoodBye ..."
+        exit 1
     fi
 }
 
