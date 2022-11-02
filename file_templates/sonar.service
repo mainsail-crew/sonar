@@ -19,6 +19,6 @@ WantedBy=multi-user.target
 [Service]
 Type=exec
 RemainAfterExit=Yes
-ExecStart= /usr/local/bin/sonar
+ExecStart=/usr/local/bin/sonar
 Restart=on-failure
 RestartSec=5
