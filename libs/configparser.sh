@@ -1,4 +1,7 @@
 #!/bin/env bash
+
+#### Configparser library
+
 #### Sonar - A WiFi Keepalive daemon
 ####
 #### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
