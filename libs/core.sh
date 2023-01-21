@@ -1,4 +1,7 @@
 #!/bin/env bash
+
+#### Core library
+
 #### Sonar - A WiFi Keepalive daemon
 ####
 #### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
@@ -63,8 +66,15 @@ function enable_service {
 ## Sanity Checks
 # Check for config file
 function check_cfg {
-    local config
-    config="${BASE_USER_HOME}/klipper_config/sonar.conf"
+    local config new_path old_path
+    new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
+    old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
+    if [[ -d "${new_path}" ]] && [[ ! -d "${old_path}" ]]; then
+        config="${new_path}"
+    fi
+    if [[ -d "${old_path}" ]] && [[ ! -d "${new_path}" ]]; then
+        config="${old_path}"
+    fi
     if [ -z "${SONAR_CFG}" ] &&
     [ -f "${config}" ]; then
         SONAR_CFG="${config}"
