@@ -9,6 +9,7 @@
 ####
 
 # shellcheck enable=require-variable-braces
+# shellcheck disable=SC2317
 
 # Global Vars
 TITLE="Sonar - A WiFi Keepalive daemon"

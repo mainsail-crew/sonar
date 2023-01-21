@@ -9,6 +9,7 @@
 ####
 
 # shellcheck enable=require-variable-braces
+# shellcheck disable=SC2317
 
 ## disabeld SC2086 for some lines because there we want 'word splitting'
 
