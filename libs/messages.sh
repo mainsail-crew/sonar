@@ -27,5 +27,4 @@ function help_msg {
     echo -e "\t sonar [Options]"
     echo -e "\n\t\t-h Prints this help."
     echo -e "\n\t\t-v Prints Version of sonar."
-    echo -e "\n\t\t-c </path/to/configfile>\n\t\t\tPath to your sonar.conf\n"
 }

@@ -42,7 +42,7 @@ source "${BASE_SNR_PATH}/libs/messages.sh"
 ## Args given?
 if [ "$#" -ne 0 ]; then
     ## Parse Args
-    while getopts ":vhc:" arg; do
+    while getopts ":vh" arg; do
         case "${arg}" in
             v )
                 echo -e "\nSonar Version: $(self_version)\n"
@@ -51,9 +51,6 @@ if [ "$#" -ne 0 ]; then
             h )
                 help_msg
                 exit 0
-            ;;
-            c )
-                export SONAR_CFG="${OPTARG}"
             ;;
             \?)
                 wrong_args_msg
