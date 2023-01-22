@@ -22,11 +22,6 @@ function get_config_path {
     new_path="${BASE_USER_HOME}/printer_data/config/sonar.conf"
     old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
 
-    debug_msg "${dot_config_file}"
-    debug_msg "${new_path}"
-    debug_msg "${old_path}"
-
-
     if [[ -e "${dot_config_file}" ]]; then
         # shellcheck disable=SC1090
         source "${dot_config_file}"
@@ -43,5 +38,4 @@ function get_config_path {
     echo "${path}"
     debug_msg "${path}"
     return
-
 }
