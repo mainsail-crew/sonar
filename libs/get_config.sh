@@ -18,7 +18,7 @@
 
 
 function get_config_path {
-    echo "sourced $(caller)"
+    echo "sourced $(basename "$(caller)")"
 }
 
 
