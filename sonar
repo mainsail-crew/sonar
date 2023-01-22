@@ -54,13 +54,8 @@ init_local_vars
 # Step 2: Import Libraries
 import_libs
 
-# Step 3: Make sure script runs with root priviledges
-if [[ "$(id -u)" != "0" ]]; then
-    do_run_as_root_msg
-    exit 1
-fi
 
-# Step 4: Parse Arguments
+# Step 3: Parse Arguments
 ## Args given?
 if [[ "$#" -ne 0 ]]; then
     ## Parse Args
@@ -80,6 +75,12 @@ if [[ "$#" -ne 0 ]]; then
             ;;
         esac
     done
+fi
+
+# Step 4: Make sure script runs with root priviledges
+if [[ "$(id -u)" != "0" ]]; then
+    do_run_as_root_msg
+    exit 1
 fi
 
 debug_msg "$(basename "${0}")"
