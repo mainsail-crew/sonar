@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 #### get_config library
 
@@ -15,3 +15,9 @@
 
 
 ## Determine Configuration File and set defaults if not found.
+
+
+function get_config_path {
+
+    if
+}

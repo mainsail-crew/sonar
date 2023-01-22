@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 #### Sonar - A WiFi Keepalive daemon
 ####
 #### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
