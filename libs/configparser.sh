@@ -18,7 +18,7 @@ set -Ee
 
 ## Debug
 if [[ "${SONAR_DEBUG}" = "1" ]]; then
-    caller
+    debug_msg "Sourced $0"
 fi
 
 # Read Configuration File
