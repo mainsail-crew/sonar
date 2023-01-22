@@ -13,59 +13,80 @@
 # Exit on Errors
 set -Ee
 
+
+
+
+
+## Helper funcs
+# Declare vars
+function init_local_vars {
+    # Base Paths
+    BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
+    declare -r BASE_SNR_PATH
+    BASE_USER_HOME="$(dirname "${BASE_SNR_PATH}")"
+    declare -r BASE_USER_HOME
+    SNR_LOG_PATH="/var/log/sonar.log"
+    declare -r SNR_LOG_PATH
+}
+
 ## Import Librarys
-# shellcheck source-path=SCRIPTDIR/libs/
-source "${BASE_SNR_PATH}/libs/configparser.sh"
-source "${BASE_SNR_PATH}/libs/core.sh"
-source "${BASE_SNR_PATH}/libs/get_config.sh"
-source "${BASE_SNR_PATH}/libs/logging.sh"
-source "${BASE_SNR_PATH}/libs/messages.sh"
+function import_libs {
+    # shellcheck source-path=SCRIPTDIR/libs/
+    source "${BASE_SNR_PATH}/libs/configparser.sh"
+    source "${BASE_SNR_PATH}/libs/core.sh"
+    source "${BASE_SNR_PATH}/libs/get_config.sh"
+    source "${BASE_SNR_PATH}/libs/logging.sh"
+    source "${BASE_SNR_PATH}/libs/messages.sh"
+}
 
-# Make sure script runs with root priviledges
-if [[ "$(id -u)" != "0" ]]; then
-    do_run_as_root_msg
-    exit 1
-fi
 
-# Base Paths
-BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
-declare -r BASE_SNR_PATH
-BASE_USER_HOME="$(dirname "${BASE_SNR_PATH}")"
-declare -r BASE_USER_HOME
-SNR_LOG_PATH="/var/log/sonar.log"
-declare -r SNR_LOG_PATH
 
-# General configuration is done by function setup_defaults
-# See libs/core.sh L#100
+
+function main {
+    # Step 1: Initialize script global variables
+    init_local_vars
+
+    # Step 2: Import Libraries
+    import_libs
+
+    # Step 3: Make sure script runs with root priviledges
+    if [[ "$(id -u)" != "0" ]]; then
+        do_run_as_root_msg
+        exit 1
+    fi
+
+    ## Args given?
+    if [[ "$#" -ne 0 ]]; then
+        ## Parse Args
+        while getopts ":vh" arg; do
+            case "${arg}" in
+                v )
+                    echo -e "\nSonar Version: $(self_version)\n"
+                    exit 0
+                ;;
+                h )
+                    help_msg
+                    exit 0
+                ;;
+                \?)
+                    wrong_args_msg
+                    exit 1
+                ;;
+            esac
+        done
+    fi
+
+    # init_log_entry
+    # initial_check
+    # while true; do
+    #     keepalive
+    #     sleep "${SONAR_CHECK_INTERVAL}"
+    # done
+
+    exit 0
+}
 
 
 #### MAIN
-## Args given?
-if [[ "$#" -ne 0 ]]; then
-    ## Parse Args
-    while getopts ":vh" arg; do
-        case "${arg}" in
-            v )
-                echo -e "\nSonar Version: $(self_version)\n"
-                exit 0
-            ;;
-            h )
-                help_msg
-                exit 0
-            ;;
-            \?)
-                wrong_args_msg
-                exit 1
-            ;;
-        esac
-    done
-fi
-
-# init_log_entry
-# initial_check
-# while true; do
-#     keepalive
-#     sleep "${SONAR_CHECK_INTERVAL}"
-# done
-
-exit 0
+debug_msg "$(basename "${0}")"
+main "${@}"
