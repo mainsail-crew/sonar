@@ -44,5 +44,3 @@ function get_config_path {
     #     echo "${old_path}"
     # fi
 }
-
-echo $(get_config_path)
