@@ -86,8 +86,8 @@ fi
 # Show debug output if set
 if [[ -n "${SONAR_DEBUG}" ]]; then
     debug_msg "$(basename "${0}")"
-    debug_msg "${BASE_SNR_PATH}"
-    debug_msg "${BASE_USER_HOME}"
+    debug_msg "Base folder: ${BASE_SNR_PATH}"
+    debug_msg "User Home: ${BASE_USER_HOME}"
     debug_msg "Config File location: $(get_config_path)"
 fi
 exit 0
