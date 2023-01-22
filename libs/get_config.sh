@@ -22,6 +22,7 @@ function get_config_path {
     dot_config_file="${BASE_SNR_PATH}/tools/.config"
     new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
     old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
+    path=""
 
     if [[ -f "${dot_config_file}" ]]; then
         # shellcheck disable=SC1090
