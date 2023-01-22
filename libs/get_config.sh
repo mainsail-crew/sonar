@@ -18,7 +18,7 @@
 
 
 function get_config_path {
-    echo "sourced $(basename "$(caller)")"
+    time echo "sourced $(basename "$(caller)")"
 }
 
 
