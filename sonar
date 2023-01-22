@@ -24,9 +24,9 @@ fi
 # Base Paths
 BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
 BASE_USER_HOME="$(dirname "${BASE_SNR_PATH}")"
-export BASE_USER_HOME
+declare -r BASE_USER_HOME
 SNR_LOG_PATH="/var/log/sonar.log"
-export SNR_LOG_PATH
+declare -r SNR_LOG_PATH
 
 # General configuration is done by function setup_defaults
 # See libs/core.sh L#100
