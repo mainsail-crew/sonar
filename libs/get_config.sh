@@ -29,11 +29,9 @@ function get_config_path {
         if [[ -f "${SONAR_CONFIG_PATH}" ]]; then
             echo "${SONAR_CONFIG_PATH}"
         fi
-    fi
-    if [ -f "${new_path}" ]; then #&& [ ! -h "${new_path}" ]; then
+    elif [ -f "${new_path}" ]; then #&& [ ! -h "${new_path}" ]; then
         echo "${new_path}"
-    fi
-    if [[ -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
+    elif [[ -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
         echo "${old_path}"
     fi
 }
