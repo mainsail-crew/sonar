@@ -131,43 +131,9 @@ function get_def_gw {
 
 # default settings
 function setup_defaults {
-    SONAR_TARGET="$(get_def_gw)"
-    export SONAR_TARGET
-    export SONAR_PING_COUNT="3"
-    export SONAR_CHECK_INTERVAL="60"
-    export SONAR_RESTART_TRESHOLD="10"
+    echo "foo"
 }
 
-# setup user config
-function setup_user_conf {
-    local target count interval treshold
-    target=$(get_param sonar target)
-    count=$(get_param sonar count)
-    interval=$(get_param sonar interval)
-    treshold=$(get_param sonar restart_treshold)
-    if [ "${target}" == "auto" ]; then
-        SONAR_TARGET="$(get_def_gw)"
-        export SONAR_TARGET
-    else
-        export SONAR_TARGET="${target}"
-    fi
-    # using defaults if empty
-    if [ -n "${count}" ]; then
-        export SONAR_PING_COUNT="${count}"
-    else
-        export SONAR_PING_COUNT="3"
-    fi
-    if [ -n "${interval}" ]; then
-        export SONAR_CHECK_INTERVAL="${interval}"
-    else
-        export SONAR_CHECK_INTERVAL="60"
-    fi
-    if [ -n "${treshold}" ]; then
-        export SONAR_RESTART_TRESHOLD="${treshold}"
-    else
-        export SONAR_RESTART_TRESHOLD="10"
-    fi
-}
 
 function check_connection {
     ping -D -c"${SONAR_PING_COUNT}" "${SONAR_TARGET}" 2> /dev/null | \

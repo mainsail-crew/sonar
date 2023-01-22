@@ -15,14 +15,13 @@ set -Ee
 
 # Make sure script runs with root priviledges
 if [[ "$(id -u)" != "0" ]]; then
-    echo -e "\nSonar - A WiFi Keepalive daemon\n"
-    echo -e "This Script is not intended to run as ${USER}!\n"
-    echo -e "ERROR: Reporting to log and exiting."
+    do_run_as_root_msg
     exit 1
 fi
 
 # Base Paths
 BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
+declare -r BASE_SNR_PATH
 BASE_USER_HOME="$(dirname "${BASE_SNR_PATH}")"
 declare -r BASE_USER_HOME
 SNR_LOG_PATH="/var/log/sonar.log"
@@ -35,6 +34,7 @@ declare -r SNR_LOG_PATH
 # shellcheck source-path=SCRIPTDIR/libs/
 source "${BASE_SNR_PATH}/libs/configparser.sh"
 source "${BASE_SNR_PATH}/libs/core.sh"
+source "${BASE_SNR_PATH}/libs/get_config.sh"
 source "${BASE_SNR_PATH}/libs/logging.sh"
 source "${BASE_SNR_PATH}/libs/messages.sh"
 

@@ -17,6 +17,13 @@
 set -Ee
 
 ## Message Helpers
+
+function do_run_as_root_msg {
+    echo -e "\nSonar - A WiFi Keepalive daemon\n"
+    echo -e "This Script is not intended to run as ${USER}!\n"
+    echo -e "ERROR: Reporting to log and exiting."
+}
+
 function wrong_args_msg {
     echo -e "Sonar: Invalid argument!\n"
     help_msg
