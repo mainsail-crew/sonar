@@ -23,8 +23,14 @@ function get_config_path {
     new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
     old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
 
+    debug_msg "${dot_config_file}"
+    debug_msg "${new_path}"
+    debug_msg "${old_path}"
+
     if [[ -f ${new_path} ]]; then
-        debug_msg "${new_path}"
+        echo "Hello"
+    else
+        exit 1
     fi
 
     # if [[ -e "${dot_config_file}" ]]; then
