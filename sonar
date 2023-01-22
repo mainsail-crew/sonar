@@ -84,7 +84,7 @@ if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
 fi
 
 # Show debug output if set
-if [[ -z "${SONAR_DEBUG}" ]]; then
+if [[ -n "${SONAR_DEBUG}" ]]; then
     debug_msg "$(basename "${0}")"
     debug_msg "${BASE_USER_HOME}}"
     debug_msg "Config File location: $(get_config_path)"
