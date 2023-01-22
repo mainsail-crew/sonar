@@ -35,3 +35,8 @@ function help_msg {
     echo -e "\n\t\t-h Prints this help."
     echo -e "\n\t\t-v Prints Version of sonar."
 }
+
+
+function debug_msg {
+    printf "DEBUG: %s\n" "${1}"
+}
