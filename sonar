@@ -88,5 +88,5 @@ function main {
 
 
 #### MAIN
-debug_msg "$(basename "${0}")"
 main "${@}"
+debug_msg "$(basename "${0}")"
