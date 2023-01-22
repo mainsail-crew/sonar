@@ -61,7 +61,7 @@ if [[ "$#" -ne 0 ]]; then
     while getopts ":vh" arg; do
         case "${arg}" in
             v )
-                printf "\nSonar Version: \e[34m%s\e[0m \n" "$(self_version)"
+                printf "Sonar Version: \e[34m%s\e[0m\n" "$(self_version)"
                 exit 0
             ;;
             h )
