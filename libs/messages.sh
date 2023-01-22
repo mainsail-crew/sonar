@@ -35,7 +35,8 @@ function help_msg {
     echo -e "sonar - WiFi Keepalive deamon\nUsage:"
     echo -e "\t sonar [Options]"
     echo -e "\n\t\t-h Prints this help."
-    echo -e "\n\t\t-v Prints Version of sonar.\n"
+    echo -e "\n\t\t-v Prints Version of sonar."
+    echo -e "\n\t\t-d Run sonar in DEBUG Mode.\n"
 }
 
 
