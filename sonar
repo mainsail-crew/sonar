@@ -13,6 +13,14 @@
 # Exit on Errors
 set -Ee
 
+## Import Librarys
+# shellcheck source-path=SCRIPTDIR/libs/
+source "${BASE_SNR_PATH}/libs/configparser.sh"
+source "${BASE_SNR_PATH}/libs/core.sh"
+source "${BASE_SNR_PATH}/libs/get_config.sh"
+source "${BASE_SNR_PATH}/libs/logging.sh"
+source "${BASE_SNR_PATH}/libs/messages.sh"
+
 # Make sure script runs with root priviledges
 if [[ "$(id -u)" != "0" ]]; then
     do_run_as_root_msg
@@ -30,13 +38,6 @@ declare -r SNR_LOG_PATH
 # General configuration is done by function setup_defaults
 # See libs/core.sh L#100
 
-## Import Librarys
-# shellcheck source-path=SCRIPTDIR/libs/
-source "${BASE_SNR_PATH}/libs/configparser.sh"
-source "${BASE_SNR_PATH}/libs/core.sh"
-source "${BASE_SNR_PATH}/libs/get_config.sh"
-source "${BASE_SNR_PATH}/libs/logging.sh"
-source "${BASE_SNR_PATH}/libs/messages.sh"
 
 #### MAIN
 ## Args given?
@@ -60,11 +61,11 @@ if [[ "$#" -ne 0 ]]; then
     done
 fi
 
-init_log_entry
-initial_check
-while true; do
-    keepalive
-    sleep "${SONAR_CHECK_INTERVAL}"
-done
+# init_log_entry
+# initial_check
+# while true; do
+#     keepalive
+#     sleep "${SONAR_CHECK_INTERVAL}"
+# done
 
 exit 0
