@@ -57,9 +57,9 @@ if [[ "$#" -ne 0 ]]; then
     while getopts ":dvh" arg; do
         case "${arg}" in
             d )
-                printf "Runnig sonar in Debug Mode"
-                set -x
+                printf "\e[33mWARN: \e[0mRunnig sonar in Debug Mode ...\n"
                 SONAR_DEBUG="1"
+                set -x
             ;;
             v )
                 printf "Sonar Version: \e[34m%s\e[0m\n" "$(self_version)"
