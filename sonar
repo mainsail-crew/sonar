@@ -13,11 +13,6 @@
 # Exit on Errors
 set -Ee
 
-# Run in debug mode if global Var is set
-if [[ "${SONAR_DEBUG}" = "1" ]]; then
-    set -x
-fi
-
 ## Helper funcs
 # Declare vars
 function init_local_vars {
@@ -59,8 +54,13 @@ import_libs
 ## Args given?
 if [[ "$#" -ne 0 ]]; then
     ## Parse Args
-    while getopts ":vh" arg; do
+    while getopts ":dvh" arg; do
         case "${arg}" in
+            d )
+                printf "Runnig sonar in Debug Mode"
+                set -x
+                SONAR_DEBUG="1"
+            ;;
             v )
                 printf "Sonar Version: \e[34m%s\e[0m\n" "$(self_version)"
                 exit 0
@@ -78,7 +78,7 @@ if [[ "$#" -ne 0 ]]; then
 fi
 
 # Step 4: Make sure script runs with root priviledges
-if [[ "$(id -u)" != "0" ]] && [[ -z "${SONAR_DEBUG}" ]]; then
+if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
     do_run_as_root_msg
     exit 1
 fi
