@@ -16,6 +16,11 @@
 # Exit on Errors
 set -Ee
 
+## Debug
+if [[ "${SONAR_DEBUG}" = "1" ]]; then
+    caller
+fi
+
 # Read Configuration File
 # call get_param section param
 # spits out raw value
