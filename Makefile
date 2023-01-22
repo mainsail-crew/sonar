@@ -34,3 +34,6 @@ install:
 
 uninstall:
 	@bash -c 'tools/uninstall.sh'
+
+update:
+	git fetch && git pull
