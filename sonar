@@ -39,23 +39,6 @@ function import_libs {
     source "${BASE_SNR_PATH}/libs/messages.sh"
 }
 
-
-
-
-function main {
-    # Step 1: Initialize script global variables
-    init_local_vars
-
-    # Step 2: Import Libraries
-    import_libs
-
-    # Step 3: Make sure script runs with root priviledges
-    if [[ "$(id -u)" != "0" ]]; then
-        do_run_as_root_msg
-        exit 1
-    fi
-
-
     # init_log_entry
     # initial_check
     # while true; do
@@ -63,31 +46,41 @@ function main {
     #     sleep "${SONAR_CHECK_INTERVAL}"
     # done
 
-    exit 0
-}
 
+#### MAIN #####
+# Step 1: Initialize script global variables
+init_local_vars
 
-#### MAIN
+# Step 2: Import Libraries
+import_libs
+
+# Step 3: Make sure script runs with root priviledges
+if [[ "$(id -u)" != "0" ]]; then
+    do_run_as_root_msg
+    exit 1
+fi
+
+# Step 4: Parse Arguments
 ## Args given?
-    if [[ "$#" -ne 0 ]]; then
-        ## Parse Args
-        while getopts ":vh" arg; do
-            case "${arg}" in
-                v )
-                    echo -e "\nSonar Version: $(self_version)\n"
-                    exit 0
-                ;;
-                h )
-                    help_msg
-                    exit 0
-                ;;
-                \?)
-                    wrong_args_msg
-                    exit 1
-                ;;
-            esac
-        done
-    fi
+if [[ "$#" -ne 0 ]]; then
+    ## Parse Args
+    while getopts ":vh" arg; do
+        case "${arg}" in
+            v )
+                echo -e "\nSonar Version: $(self_version)\n"
+                exit 0
+            ;;
+            h )
+                help_msg
+                exit 0
+            ;;
+            \?)
+                wrong_args_msg
+                exit 1
+            ;;
+        esac
+    done
+fi
 
-main
 debug_msg "$(basename "${0}")"
+exit 0
