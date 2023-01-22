@@ -18,25 +18,23 @@
 
 
 function get_config_path {
-    local dot_config_file new_path old_path path
+    local dot_config_file new_path old_path
     dot_config_file="${BASE_SNR_PATH}/tools/.config"
     new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
     old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
-    path=""
 
     if [[ -f "${dot_config_file}" ]]; then
         # shellcheck disable=SC1090
         source "${dot_config_file}"
         if [[ -f "${SONAR_CONFIG_PATH}" ]]; then
-            path+="${SONAR_CONFIG_PATH}"
+            echo "${SONAR_CONFIG_PATH}"
         fi
     fi
     if [[ -f "${new_path}" ]] && [[ ! -h "${new_path}" ]]; then
-        path+="${new_path}"
+        echo "${new_path}"
     fi
     if [[ -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
-        path+="${old_path}"
+        echo "${old_path}"
     fi
-    echo "${path}"
     return
 }
