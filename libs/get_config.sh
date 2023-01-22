@@ -34,7 +34,7 @@ function get_config_path {
             path="${SONAR_CONFIG_PATH}"
         fi
     fi
-    if [ -e "${new_path}" ] && [ ! -h "${new_path}" ]; then
+    if [[ -e "${new_path}" ]] && [[ ! -h "${new_path}" ]]; then
         path="${new_path}"
     fi
     if [[ -e "${old_path}" ]] && [[ ! -e "${new_path}" ]]; then
