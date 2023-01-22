@@ -40,5 +40,3 @@ function get_config_path {
         return
     fi
 }
-
-debug_msg "Config File location: $(get_config_path)"
