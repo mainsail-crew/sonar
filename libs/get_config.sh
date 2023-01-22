@@ -30,7 +30,7 @@ function get_config_path {
             echo "${SONAR_CONFIG_PATH}"
         fi
     fi
-    if [ -f "${new_path}" ]: then #&& [ ! -h "${new_path}" ]; then
+    if [ -f "${new_path}" ]; then #&& [ ! -h "${new_path}" ]; then
         echo "${new_path}"
     fi
     if [[ -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
