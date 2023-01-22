@@ -19,7 +19,7 @@
 function get_config_path {
     local dot_config_file new_path old_path
     dot_config_file="${BASE_SNR_PATH}/tools/.config"
-    new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
+    new_path="${BASE_USER_HOME}/printer_data/config/sonar.conf"
     old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
 
     debug_msg "${dot_config_file}"
