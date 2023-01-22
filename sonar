@@ -55,7 +55,20 @@ function main {
         exit 1
     fi
 
-    ## Args given?
+
+    # init_log_entry
+    # initial_check
+    # while true; do
+    #     keepalive
+    #     sleep "${SONAR_CHECK_INTERVAL}"
+    # done
+
+    exit 0
+}
+
+
+#### MAIN
+## Args given?
     if [[ "$#" -ne 0 ]]; then
         ## Parse Args
         while getopts ":vh" arg; do
@@ -76,17 +89,5 @@ function main {
         done
     fi
 
-    # init_log_entry
-    # initial_check
-    # while true; do
-    #     keepalive
-    #     sleep "${SONAR_CHECK_INTERVAL}"
-    # done
-
-    exit 0
-}
-
-
-#### MAIN
-main "${@}"
+main
 debug_msg "$(basename "${0}")"
