@@ -29,7 +29,7 @@ function get_config_path {
     debug_msg "${new_path}"
     debug_msg "${old_path}"
 
-    if [[ -f ${new_path} ]]; then
+    if [[ -f "${new_path}" ]]; then
         echo "Hello"
     else
         exit 1
