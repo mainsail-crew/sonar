@@ -35,6 +35,6 @@ function get_config_path {
     if [[ -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
         path="${old_path}"
     fi
-    echo "${path}"
-    return
+    # Error Handling
+    [[ -n "${path}" ]] && echo "${path}" || exit 1
 }
