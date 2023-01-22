@@ -36,5 +36,9 @@ function get_config_path {
         path="${old_path}"
     fi
     # Error Handling
-    [[ -z "${path}" ]] && exit 1 || echo "${path}"
+    if [[ -z "${path}" ]]; then
+        return 1
+    fi
+    echo "${path}"
+    return
 }
