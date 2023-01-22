@@ -13,9 +13,27 @@
 # Exit on Errors
 set -Ee
 
+## Helper funcs
+# Declare vars
+function init_local_vars {
+    # Base Paths
+    BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
+    declare -r BASE_SNR_PATH
+    BASE_USER_HOME="$(dirname "$(dirname "$(readlink -f "${0}")")")"
+    declare -r BASE_USER_HOME
+    SNR_LOG_PATH="/var/log/sonar.log"
+    declare -r SNR_LOG_PATH
+}
 
-
-
+## Import Librarys
+function import_libs {
+    # shellcheck source-path=SCRIPTDIR/libs/
+    source "${BASE_SNR_PATH}/libs/configparser.sh"
+    source "${BASE_SNR_PATH}/libs/core.sh"
+    source "${BASE_SNR_PATH}/libs/get_config.sh"
+    source "${BASE_SNR_PATH}/libs/logging.sh"
+    source "${BASE_SNR_PATH}/libs/messages.sh"
+}
 
     # init_log_entry
     # initial_check
@@ -27,20 +45,10 @@ set -Ee
 
 #### MAIN #####
 # Step 1: Initialize script global variables
-BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
-declare -r BASE_SNR_PATH
-BASE_USER_HOME="$(dirname "${BASE_SNR_PATH}")"
-declare -r BASE_USER_HOME
-SNR_LOG_PATH="/var/log/sonar.log"
-declare -r SNR_LOG_PATH
+init_local_vars
 
 # Step 2: Import Libraries
-# shellcheck source-path=SCRIPTDIR/libs/
-source "${BASE_SNR_PATH}/libs/configparser.sh"
-source "${BASE_SNR_PATH}/libs/core.sh"
-source "${BASE_SNR_PATH}/libs/get_config.sh"
-source "${BASE_SNR_PATH}/libs/logging.sh"
-source "${BASE_SNR_PATH}/libs/messages.sh"
+import_libs
 
 # Step 3: Parse Arguments
 ## Args given?
@@ -74,5 +82,6 @@ if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
     do_run_as_root_msg
     exit 1
 fi
-get_config_path
+
+debug_msg "$(get_config_path)"
 exit 0
