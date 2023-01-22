@@ -45,13 +45,10 @@ function import_libs {
 
 #### MAIN #####
 # Step 1: Initialize script global variables
-if ! init_local_vars; then
-    echo "Failed to initialize Variables"
-    exit 1
-fi
+init_local_vars
 
 # Step 2: Import Libraries
-caller import_libs
+import_libs
 
 # Step 3: Parse Arguments
 ## Args given?
