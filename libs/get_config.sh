@@ -37,7 +37,7 @@ function get_config_path {
     fi
     # Error Handling
     if [[ -z "${path}" ]]; then
-        log_msg "ERROR: No configuration file found"
+        log_msg "ERROR: No configuration file found ..."
         return 1
     else
         echo "${path}"
