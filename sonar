@@ -51,7 +51,7 @@ if ! init_local_vars; then
 fi
 
 # Step 2: Import Libraries
-import_libs
+caller import_libs
 
 # Step 3: Parse Arguments
 ## Args given?
