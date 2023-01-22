@@ -40,7 +40,7 @@ source "${BASE_SNR_PATH}/libs/messages.sh"
 
 #### MAIN
 ## Args given?
-if [ "$#" -ne 0 ]; then
+if [[ "$#" -ne 0 ]]; then
     ## Parse Args
     while getopts ":vh" arg; do
         case "${arg}" in
