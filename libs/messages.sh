@@ -40,5 +40,5 @@ function help_msg {
 
 
 function debug_msg {
-    printf "DEBUG: %s\n" "${1}"
+    printf "\e[31mDEBUG:\e[0m %s\n" "${1}"
 }
