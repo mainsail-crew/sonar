@@ -26,7 +26,7 @@ function get_config_path {
     debug_msg "${new_path}"
     debug_msg "${old_path}"
 
-    if [[ -f "${BASE_USER_HOME}/printer_data/sonar.conf" ]]; then
+    if [[ -e "${BASE_USER_HOME}/printer_data/sonar.conf" ]]; then
         echo "Hello"
     else
         exit 1
