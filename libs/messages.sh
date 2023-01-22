@@ -21,7 +21,9 @@ set -Ee
 function do_run_as_root_msg {
     echo -e "\nSonar - A WiFi Keepalive daemon\n"
     echo -e "This Script is not intended to run as ${USER}!\n"
-    echo -e "ERROR: Reporting to log and exiting."
+    echo -e "Please enable the service by\n"
+    echo -e "\tsudo systemctl enable sonar.service --now"
+    echo -e "GoodBye ..."
 }
 
 function wrong_args_msg {
