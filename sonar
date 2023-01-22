@@ -13,9 +13,10 @@
 # Exit on Errors
 set -Ee
 
-
-
-
+# Run in debug mode if global Var is set
+if [[ "${SONAR_DEBUG}" = "1" ]]; then
+    set -x
+fi
 
 ## Helper funcs
 # Declare vars
@@ -77,7 +78,7 @@ if [[ "$#" -ne 0 ]]; then
 fi
 
 # Step 4: Make sure script runs with root priviledges
-if [[ "$(id -u)" != "0" ]]; then
+if [[ "$(id -u)" != "0" ]] && [[ -z "${SONAR_DEBUG}" ]]; then
     do_run_as_root_msg
     exit 1
 fi
