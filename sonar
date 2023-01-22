@@ -74,5 +74,5 @@ if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
     do_run_as_root_msg
     exit 1
 fi
-
+get_config_path
 exit 0
