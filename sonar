@@ -19,7 +19,7 @@ function init_local_vars {
     # Base Paths
     BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
     declare -r BASE_SNR_PATH
-    BASE_USER_HOME="$(dirname "${BASE_SNR_PATH}"+/)"
+    BASE_USER_HOME="$(dirname "${BASE_SNR_PATH##/}")"
     declare -r BASE_USER_HOME
     SNR_LOG_PATH="/var/log/sonar.log"
     declare -r SNR_LOG_PATH
