@@ -14,7 +14,7 @@
 set -Ee
 
 # Make sure script runs with root priviledges
-if [ "$(id -u)" != "0" ]; then
+if [[ "$(id -u)" != "0" ]]; then
     echo -e "\nSonar - A WiFi Keepalive daemon\n"
     echo -e "This Script is not intended to run as ${USER}!\n"
     echo -e "ERROR: Reporting to log and exiting."
