@@ -16,9 +16,6 @@
 
 ## Determine Configuration File and set defaults if not found.
 
-# Error Handling
-set -Ee
-
 function get_config_path {
     local dot_config_file new_path old_path
     dot_config_file="${BASE_SNR_PATH}/tools/.config"
