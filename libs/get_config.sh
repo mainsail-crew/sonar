@@ -26,11 +26,14 @@ function get_config_path {
     debug_msg "${new_path}"
     debug_msg "${old_path}"
 
-    if [[ -e "${BASE_USER_HOME}/printer_data/sonar.conf" ]]; then
-        echo "Hello"
-    else
-        exit 1
-    fi
+
+    find "${new_path}" -print
+
+    # if [[ -e "${BASE_USER_HOME}/printer_data/sonar.conf" ]]; then
+    #     echo "Hello"
+    # else
+    #     exit 1
+    # fi
 
     # if [[ -e "${dot_config_file}" ]]; then
     #     # shellcheck disable=SC1090
