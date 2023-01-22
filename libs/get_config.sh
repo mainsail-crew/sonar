@@ -18,6 +18,5 @@
 
 
 function get_config_path {
-
-    if
+    echo "sourced $(caller)"
 }
