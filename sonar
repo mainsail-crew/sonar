@@ -54,7 +54,6 @@ init_local_vars
 # Step 2: Import Libraries
 import_libs
 
-
 # Step 3: Parse Arguments
 ## Args given?
 if [[ "$#" -ne 0 ]]; then
@@ -62,7 +61,7 @@ if [[ "$#" -ne 0 ]]; then
     while getopts ":vh" arg; do
         case "${arg}" in
             v )
-                echo -e "\nSonar Version: $(self_version)\n"
+                printf "\nSonar Version: %s\n" "$(self_version)"
                 exit 0
             ;;
             h )
