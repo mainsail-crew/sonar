@@ -100,7 +100,7 @@ fi
 init_setup_vars
 
 # Step 6: Initialize logging
-init_log_entry & waitpid="${!}"; wait "${waitpid}"
+init_log_entry
 
 # Step 7: Check service is enabled
 run_service
