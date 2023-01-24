@@ -39,7 +39,7 @@ function log_msg {
         prefix="$(date +'[%D %T]') sonar:"
         echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
     fi
-    printf "%s\n" "${msg}"
+    echo -e "${msg}"
 }
 
 function print_cfg {
