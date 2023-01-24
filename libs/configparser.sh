@@ -16,12 +16,15 @@
 # Exit on Errors
 set -Ee
 
+SONAR_CFG=$(get_config_path)
+declare -r SONAR_CFG
+
 # Read Configuration File
 # call get_param section param
 # spits out raw value
 function get_param {
     local cfg section param
-    #cfg="$(get_config_path)"
+    cfg="${SONAR_CFG}"
     section="${1}"
     param="${2}"
     crudini --get "${cfg}" "${section}" "${param}" 2> /dev/null | \
