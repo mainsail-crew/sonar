@@ -83,12 +83,6 @@ if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
     exit 1
 fi
 
-# Step 5: Declare config path
-SONAR_CFG=$(get_config_path)
-declare -r SONAR_CFG
-
-
-
 
 debug_msg "$(get_config_path)"
 exit 0
