@@ -42,7 +42,6 @@ function help_msg {
 function fallback_msg {
     log_msg "WARN: No configuration file found ..."
     log_msg "INFO: Using fallback setup ..."
-    return 0
 }
 
 
