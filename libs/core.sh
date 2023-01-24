@@ -111,7 +111,7 @@ function get_def_gw {
 
 function check_connection {
     ping -D -c"${1}" "${2}" 2> /dev/null | \
-    tail -n1 | sed 's/rtt/Triptime:/' || echo "-/-/-"
+    tail -n1 | sed 's/rtt/Triptime:/'
 }
 
 function setup_env {
