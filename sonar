@@ -105,5 +105,10 @@ init_log_entry
 # Step 7: Check service is enabled
 run_service
 
+# Step X: Loop
+while true; do
+    keepalive
+    sleep 10
+done
 
 exit 0
