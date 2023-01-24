@@ -109,12 +109,6 @@ function get_def_gw {
     fi
 }
 
-# default settings
-function setup_defaults {
-    echo "foo"
-}
-
-
 function check_connection {
     ping -D -c"${SONAR_PING_COUNT}" "${SONAR_TARGET}" 2> /dev/null | \
     tail -n1 | sed 's/rtt/Triptime:/'
