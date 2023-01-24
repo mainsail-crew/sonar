@@ -25,6 +25,7 @@ function init_log_entry {
     log_msg "Sonar - A WiFi Keepalive daemon"
     log_msg "Version: ${SNR_LOCAL_VERSION}"
     log_msg "Prepare Startup ..."
+    return 0
 }
 
 function log_msg {
