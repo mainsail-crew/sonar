@@ -44,7 +44,6 @@ function fallback_msg {
     log_msg "INFO: Using fallback setup ..."
 }
 
-
 function debug_msg {
     printf "\e[31mDEBUG:\e[0m %s\n" "${1}"
 }

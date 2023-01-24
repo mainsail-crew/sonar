@@ -28,6 +28,16 @@ function init_log_entry {
     print_cfg
 }
 
+function print_cfg {
+    local prefix
+    prefix="\t\t"
+    log_msg "INFO: Print Configfile: '$(get_config_path)'"
+    while read -r line; do
+        log_msg "${prefix}${line}"
+    done < "$(get_config_path)"
+    log_msg "\n"
+}
+
 function log_msg {
     local msg prefix
     msg="${1}"
@@ -40,14 +50,4 @@ function log_msg {
         echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
     fi
     echo -e "${msg}"
-}
-
-function print_cfg {
-    local prefix
-    prefix="\t\t"
-    log_msg "INFO: Print Configfile: '$(basename "$(get_config_path)")'"
-    while read -r line; do
-        log_msg "${prefix}${line}"
-    done < "$(get_config_path)"
-    log_msg "\n"
 }
