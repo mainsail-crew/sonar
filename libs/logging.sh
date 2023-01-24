@@ -25,7 +25,6 @@ function init_log_entry {
     log_msg "Sonar - A WiFi Keepalive daemon"
     log_msg "Version: ${SNR_LOCAL_VERSION}"
     log_msg "Prepare Startup ..."
-    return 0
 }
 
 function log_msg {
@@ -39,7 +38,7 @@ function log_msg {
         prefix="$(date +'[%D %T]') sonar:"
         echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
     fi
-    logger -t "$(basename "${0}")" <<< "${msg}" & sleep 0.1
+    logger -t "$(basename "${0}")" <<< "${msg}" ; pidof logger
 }
 
 function print_cfg {
