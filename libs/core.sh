@@ -54,9 +54,8 @@ function shutdown {
 # Service disabled by user
 function enable_service {
     local config service
-    config="${BASE_USER_HOME}/klipper_config/sonar.conf"
     service="$(get_param sonar enable)"
-    if [ -f "${config}" ] && [ "${service}" == "false" ]; then
+    if [[ "${service}" == "false" ]]; then
         log_msg "Sonar.service disabled by user configuration"
         log_msg "Service will be halted until next reboot"
         systemctl stop sonar.service
