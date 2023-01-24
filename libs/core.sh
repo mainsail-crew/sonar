@@ -112,7 +112,6 @@ function get_def_gw {
 function check_connection {
     local ping
     ping="$(ping -c"${1}" "${2}" 2> /dev/null || echo "")"
-    debug_msg "$ping"
     if [[ -n "${ping}" ]]; then
         (echo "${ping}" | tail -n1 | sed 's/rtt/Triptime:/')
     fi
