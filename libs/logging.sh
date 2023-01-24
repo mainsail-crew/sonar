@@ -16,12 +16,6 @@
 # Exit on Errors
 set -Ee
 
-
-# Set local scope variables
-SNR_PERSISTANT_LOG="$(get_param sonar persistant_log)"
-declare -r SNR_PERSISTANT_LOG
-
-
 ## Logging
 function debug_log {
     get_param sonar debug_log 2> /dev/null || echo "false"
@@ -29,7 +23,7 @@ function debug_log {
 
 function init_log_entry {
     log_msg "Sonar - A WiFi Keepalive daemon"
-    log_msg "Version: $(self_version)"
+    log_msg "Version: ${SNR_LOCAL_VERSION}"
     log_msg "Prepare Startup ..."
 }
 
@@ -56,4 +50,3 @@ function print_cfg {
     done < "${SONAR_CFG}"
     log_msg "\n"
 }
-

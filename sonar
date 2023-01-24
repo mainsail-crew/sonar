@@ -35,6 +35,19 @@ function import_libs {
     source "${BASE_SNR_PATH}/libs/messages.sh"
 }
 
+## Initialize setup Variables
+function init_setup_vars {
+    # Set setup scope variables
+    # Version
+    SNR_LOCAL_VERSION="$(self_version)"
+    declare -r SNR_LOCAL_VERSION
+
+    # Logging
+    SNR_PERSISTANT_LOG="$(get_param sonar persistant_log)"
+    declare -r SNR_PERSISTANT_LOG
+
+}
+
     # init_log_entry
     # initial_check
     # while true; do
@@ -83,6 +96,8 @@ if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
     exit 1
 fi
 
+# Step 5: Initialize Setup Variables
+init_setup_vars
 
 debug_msg "$(get_config_path)"
 exit 0
