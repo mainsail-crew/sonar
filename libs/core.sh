@@ -110,8 +110,11 @@ function get_def_gw {
 }
 
 function check_connection {
-    ping -D -c"${1}" "${2}" 2>&1 | \
-    tail -n1 | sed 's/rtt/Triptime:/'
+    local ping
+    ping="$(ping -c"${1}" "${2}" 2> /dev/null || echo "")"
+    if [[ -n "${ping}" ]]; then
+        echo "$(echo "${ping}" | tail -n1 | sed 's/rtt/Triptime:/')"
+    fi
 }
 
 function setup_env {
@@ -152,7 +155,9 @@ function keepalive {
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
         log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD} seconds."
         sleep "${SONAR_RESTART_TRESHOLD}"
+        log_msg "Reassociate WiFi connection ..."
         wpa_cli -i wlan0 reassociate &> /dev/null
+        log_msg "Restarting dhcpcd service ..."
         systemctl restart dhcpcd
         log_msg "Waiting 10 seconds to re-establish connection."
         sleep 10
