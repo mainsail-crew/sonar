@@ -40,7 +40,7 @@ function init_setup_vars {
     # Set setup scope variables
     # Version
     SNR_LOCAL_VERSION="$(self_version)"
-    declare -r SNR_LOCAL_VERSION
+    declare -rx SNR_LOCAL_VERSION
 
     # Logging
     SNR_PERSISTANT_LOG="$(get_param sonar persistant_log)"

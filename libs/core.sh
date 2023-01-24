@@ -63,29 +63,29 @@ function enable_service {
     fi
 }
 
-## Sanity Checks
-# Check for config file
-function check_cfg {
-    local config new_path old_path
-    new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
-    old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
-    if [[ -d "${new_path}" ]] && [[ ! -d "${old_path}" ]]; then
-        config="${new_path}"
-    fi
-    if [[ -d "${old_path}" ]] && [[ ! -d "${new_path}" ]]; then
-        config="${old_path}"
-    fi
-    if [ -z "${SONAR_CFG}" ] &&
-    [ -f "${config}" ]; then
-        SONAR_CFG="${config}"
-        log_msg "INFO: Found config file ${SONAR_CFG}, import settings."
-        print_cfg
-        setup_user_conf
-    else
-        log_msg "INFO: No config file found, using defaults."
-        setup_defaults
-    fi
-}
+# ## Sanity Checks
+# # Check for config file
+# function check_cfg {
+#     local config new_path old_path
+#     new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
+#     old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
+#     if [[ -d "${new_path}" ]] && [[ ! -d "${old_path}" ]]; then
+#         config="${new_path}"
+#     fi
+#     if [[ -d "${old_path}" ]] && [[ ! -d "${new_path}" ]]; then
+#         config="${old_path}"
+#     fi
+#     if [ -z "${SONAR_CFG}" ] &&
+#     [ -f "${config}" ]; then
+#         SONAR_CFG="${config}"
+#         log_msg "INFO: Found config file ${SONAR_CFG}, import settings."
+#         print_cfg
+#         setup_user_conf
+#     else
+#         log_msg "INFO: No config file found, using defaults."
+#         setup_defaults
+#     fi
+# }
 
 # Dependency Check
 # call check_dep <programm>, ex.: check_dep vim
