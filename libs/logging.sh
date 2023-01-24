@@ -16,6 +16,12 @@
 # Exit on Errors
 set -Ee
 
+
+# Set local scope variables
+SNR_PERSISTANT_LOG="$(get_param sonar persistant_log)"
+declare -r SNR_PERSISTANT_LOG
+
+
 ## Logging
 function debug_log {
     get_param sonar debug_log 2> /dev/null || echo "false"
@@ -30,7 +36,7 @@ function init_log_entry {
 function log_msg {
     local msg prefix
     msg="${1}"
-    if [ "$(get_param sonar persistant_log)" == "true" ]; then
+    if [[ "${SNR_PERSISTANT_LOG}" == "true" ]]; then
         # make sure file exists
         if [ ! -f "${SNR_LOG_PATH}" ]; then
             touch "${SNR_LOG_PATH}"
