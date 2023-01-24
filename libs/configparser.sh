@@ -21,7 +21,7 @@ set -Ee
 # spits out raw value
 function get_param {
     local cfg section param
-    cfg="$(get_config_path)"
+    #cfg="$(get_config_path)"
     section="${1}"
     param="${2}"
     crudini --get "${cfg}" "${section}" "${param}" 2> /dev/null | \
