@@ -51,9 +51,9 @@ function shutdown {
     exit 0
 }
 
-# Service disabled by user
-function enable_service {
-    local config service
+# Service disabled by default
+function run_service {
+    local service
     service="$(get_param sonar enable)"
     if [[ "${service}" == "false" ]]; then
         log_msg "Sonar.service disabled by user configuration"

@@ -99,5 +99,8 @@ fi
 # Step 5: Initialize Setup Variables
 init_setup_vars
 
+# Step 6: Check service is enabled
+run_service
+
 debug_msg "$(get_config_path)"
 exit 0
