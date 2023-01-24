@@ -110,7 +110,7 @@ function get_def_gw {
 }
 
 function check_connection {
-    ping -D -c"${SONAR_PING_COUNT}" "${SONAR_TARGET}" 2> /dev/null | \
+    ping -D -c"${1}" "${2}" 2> /dev/null | \
     tail -n1 | sed 's/rtt/Triptime:/' || echo "-/-/-"
 }
 
@@ -140,7 +140,7 @@ function setup_env {
 
 function keepalive {
     local triptime
-    triptime="$(check_connection)"
+    triptime="$(check_connection "${SONAR_PING_COUNT}" "${SONAR_TARGET}")"
     if [[ "${SONAR_SETUP_COMPLETE}" != "1" ]]; then
         setup_env
     fi
