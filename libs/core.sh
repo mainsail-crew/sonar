@@ -57,8 +57,8 @@ function run_service {
     service="$(get_param sonar enable)"
     if [[ "${service}" == "false" ]]; then
         log_msg "Sonar.service disabled by configuration ..."
-        log_msg "Service will be halted until next reboot ..."
         if [[ "$(systemctl is-active sonar.service 2> /dev/null)" != "inactive" ]]; then
+            log_msg "Service will be halted until next reboot ..."
             systemctl stop sonar.service
         else
             log_msg "ERROR: Sonar Service already inactive ..."
