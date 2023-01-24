@@ -109,10 +109,6 @@ function get_def_gw {
     fi
 }
 
-# function check_connection {
-#     ping -c"${1}" "${2}" | tail -n1 | sed '/pipe.*/d;s/rtt/Triptime:/'
-# }
-
 function setup_env {
     local target
     target="$(get_param sonar target)"
@@ -142,8 +138,11 @@ function keepalive {
     if [[ "${SONAR_SETUP_COMPLETE}" != "1" ]]; then
         setup_env
     fi
+
+    # Store triptime if ! failed
     triptime="$(ping -c"${SONAR_PING_COUNT}" "${SONAR_TARGET}" | \
         tail -n1 | sed '/pipe.*/d;s/rtt/Triptime:/')"
+
     if [[ -n "${triptime}" ]]; then
         if [[ "${SONAR_DEBUG_LOG}" == "true" ]]; then
             log_msg "Reached ${SONAR_TARGET}, ${triptime}"
