@@ -100,7 +100,9 @@ fi
 init_setup_vars
 
 # Step 6: Initialize logging
-init_log_entry
+while init_log_entry; do
+    sleep 1
+done
 
 # Step 7: Check service is enabled
 run_service
