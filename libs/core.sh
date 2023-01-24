@@ -62,6 +62,7 @@ function run_service {
             systemctl stop sonar.service
         else
             log_msg "ERROR: Sonar Service already inactive ..."
+            exit 0
         fi
     fi
 }
