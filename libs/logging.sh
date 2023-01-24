@@ -45,9 +45,9 @@ function log_msg {
 function print_cfg {
     local prefix
     prefix="\t\t"
-    log_msg "INFO: Print Configfile: '${SONAR_CFG}'"
+    log_msg "INFO: Print Configfile: '$(basename "$(get_config_path)")'"
     while read -r line; do
         log_msg "${prefix}${line}"
-    done < "${SONAR_CFG}"
+    done < "$(get_config_path)"
     log_msg "\n"
 }
