@@ -28,7 +28,7 @@ function init_log_entry {
 }
 
 function log_msg {
-    local msg prefix
+    local loggerpid msg prefix
     msg="${1}"
     if [[ "${SNR_PERSISTANT_LOG}" == "true" ]]; then
         # make sure file exists
@@ -38,7 +38,8 @@ function log_msg {
         prefix="$(date +'[%D %T]') sonar:"
         echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
     fi
-    logger -t sonar <<< "${msg}" && return
+    logger -t sonar <<< "${msg}" & loggerpid="${!}"
+    wait "${loggerpid}"
 }
 
 function print_cfg {
