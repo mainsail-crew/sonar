@@ -102,8 +102,8 @@ init_setup_vars
 # Step 6: Initialize logging
 init_log_entry
 
-# Step 7: Check service is enabled
-run_service
+# Step 7: Initial Check
+initial_check
 
 # Step X: Loop
 while true; do
