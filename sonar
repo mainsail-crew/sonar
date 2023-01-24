@@ -106,8 +106,7 @@ initial_check
 
 # Step X: Loop
 while true; do
-    #keepalive
-    debug_msg "$(check_connection)"
+    keepalive
     sleep 10
 done
 
