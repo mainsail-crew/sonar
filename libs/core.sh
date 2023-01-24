@@ -115,8 +115,14 @@ function check_connection {
 }
 
 function setup_env {
+    local target
+    target="$(get_param sonar target)"
     # Use default values if parameter is missing
-    SONAR_TARGET="$(get_param sonar target || get_def_gw)"
+    if [[ "${target}" == "auto" ]]; then
+        SONAR_TARGET="$(get_def_gw)"
+    else
+        SONAR_TARGET="${target}"
+    fi
     SONAR_PING_COUNT="$(get_param sonar count || echo "3")"
     SONAR_CHECK_INTERVAL="$(get_param sonar interval || echo "60")"
     SONAR_RESTART_TRESHOLD="$(get_param sonar restart_treshold || echo "10")"
@@ -146,7 +152,7 @@ function keepalive {
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
         log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD} seconds."
         sleep "${SONAR_RESTART_TRESHOLD}"
-        wpa_cli -i wlan0 reassociate
+        wpa_cli -i wlan0 reassociate &> /dev/null
         systemctl restart dhcpcd
         log_msg "Waiting 10 seconds to re-establish connection."
         sleep 10
