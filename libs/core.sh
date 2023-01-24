@@ -113,7 +113,7 @@ function check_connection {
     local ping
     ping="$(ping -c"${1}" "${2}" 2> /dev/null || echo "")"
     if [[ -n "${ping}" ]]; then
-        echo "$(echo "${ping}" | tail -n1 | sed 's/rtt/Triptime:/')"
+        (echo "${ping}" | tail -n1 | sed 's/rtt/Triptime:/')
     fi
 }
 
