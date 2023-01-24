@@ -39,8 +39,8 @@ function get_config_path {
     fi
     # Fallback Handling
     if [[ ! -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
-        fallback_msg
         path="${fallback}"
+        fallback_msg
     fi
     echo "${path}"
 }
