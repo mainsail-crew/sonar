@@ -23,6 +23,6 @@ function get_param {
     local section param
     section="${1}"
     param="${2}"
-    crudini --get "${SONAR_CFG}" "${section}" "${param}" 2> /dev/null | \
+    crudini --get "$(get_config_path)" "${section}" "${param}" 2> /dev/null | \
     sed 's/\#.*//;s/[[:space:]]*$//'
 }
