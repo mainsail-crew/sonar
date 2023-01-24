@@ -107,7 +107,8 @@ run_service
 
 # Step X: Loop
 while true; do
-    keepalive
+    #keepalive
+    debug_msg "Looping ...."
     sleep 10
 done
 
