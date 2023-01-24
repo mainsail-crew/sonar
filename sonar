@@ -45,7 +45,6 @@ function init_setup_vars {
     # Logging
     SNR_PERSISTANT_LOG="$(get_param sonar persistant_log)"
     declare -r SNR_PERSISTANT_LOG
-
 }
 
     # init_log_entry

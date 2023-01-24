@@ -82,7 +82,7 @@ function check_dep {
     fi
 }
 
-# Check all needed Dependencies
+# Initial Check
 function initial_check {
     log_msg "INFO: Checking Dependencys"
     check_dep "crudini"
@@ -111,23 +111,45 @@ function get_def_gw {
 
 function check_connection {
     ping -D -c"${SONAR_PING_COUNT}" "${SONAR_TARGET}" 2> /dev/null | \
-    tail -n1 | sed 's/rtt/Triptime:/'
+    tail -n1 | sed 's/rtt/Triptime:/' || echo "-/-/-"
+}
+
+function setup_env {
+    # Use default values if parameter is missing
+    SONAR_TARGET="$(get_param sonar target || get_def_gw)"
+    SONAR_PING_COUNT="$(get_param sonar count || echo "3")"
+    SONAR_CHECK_INTERVAL="$(get_param sonar interval || echo "60")"
+    SONAR_RESTART_TRESHOLD="$(get_param sonar restart_treshold || echo "10")"
+    SONAR_DEBUG_LOG="$(get_param sonar debug_log || echo "false")"
+    declare -r SONAR_TARGET
+    declare -r SONAR_PING_COUNT
+    declare -r SONAR_CHECK_INTERVAL
+    declare -r SONAR_RESTART_TRESHOLD
+    declare -r SONAR_DEBUG_LOG
+
+    # Set vars only once!
+    SONAR_SETUP_COMPLETE=1
+    declare -r SONAR_SETUP_COMPLETE
 }
 
 function keepalive {
     local triptime
     triptime="$(check_connection)"
-    if [ -n "${triptime}" ]; then
-        if [ "$(debug_log)" == "true" ]; then
+    if [[ "${SONAR_SETUP_COMPLETE}" != "1" ]]; then
+        setup_env
+    fi
+    if [[ -n "${triptime}" ]]; then
+        if [[ "${SONAR_DEBUG_LOG}" == "true" ]]; then
             log_msg "Reached ${SONAR_TARGET}, ${triptime}"
         fi
     else
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
         log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD} seconds."
-        ifconfig wlan0 down
         sleep "${SONAR_RESTART_TRESHOLD}"
-        ifconfig wlan0 up
+        wpa_cli -i wlan0 reassociate
+        systemctl restart dhcpcd
         log_msg "Waiting 10 seconds to re-establish connection."
         sleep 10
     fi
+    sleep "${SONAR_CHECK_INTERVAL}"
 }
