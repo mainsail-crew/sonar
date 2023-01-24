@@ -38,7 +38,7 @@ function log_msg {
         prefix="$(date +'[%D %T]') sonar:"
         echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
     fi
-    logger -t sonar "${msg}" && wait "$(pidof logger)"
+    logger -t sonar "${msg}" & wait "${!}"
 }
 
 function print_cfg {
