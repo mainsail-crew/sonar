@@ -13,6 +13,7 @@
 
 # shellcheck enable=require-variable-braces
 
+set -Ee
 
 ## Determine Configuration File and set defaults if not found.
 
@@ -42,5 +43,4 @@ function get_config_path {
         path="${fallback}"
     fi
     echo "${path}"
-    return
 }
