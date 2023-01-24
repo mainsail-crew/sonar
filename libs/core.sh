@@ -61,7 +61,8 @@ function run_service {
             log_msg "Service will be halted until next reboot ..."
             systemctl stop sonar.service
         else
-            log_msg "ERROR: Sonar Service already inactive ..."
+            log_msg "WARN: Sonar Service already inactive ..."
+            log_msg "INFO: Exiting! GoodBye ..."
             exit 0
         fi
     fi
