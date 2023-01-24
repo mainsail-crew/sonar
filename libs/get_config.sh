@@ -21,6 +21,7 @@ function get_config_path {
     dot_config_file="${BASE_SNR_PATH}/tools/.config"
     new_path="${BASE_USER_HOME}/printer_data/config/sonar.conf"
     old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
+    fallback="${BASE_SNR_PATH}/resources/sonar.conf"
 
     if [[ -f "${dot_config_file}" ]]; then
         # shellcheck disable=SC1090
@@ -35,12 +36,11 @@ function get_config_path {
     if [[ -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
         path="${old_path}"
     fi
-    # Error Handling
+    # Fallback Handling
     if [[ -z "${path}" ]]; then
-        log_msg "ERROR: No configuration file found ..."
-        return 1
-    else
-        echo "${path}"
-        return
+        fallback_msg
+        path="${fallback}"
     fi
+    echo "${path}"
+    return
 }

@@ -39,6 +39,11 @@ function help_msg {
     echo -e "\n\t\t-d Run sonar in DEBUG Mode.\n"
 }
 
+function fallback_msg {
+    log_msg "WARN: No configuration file found ..."
+    log_msg "INFO: Using fallback setup ..."
+}
+
 
 function debug_msg {
     printf "\e[31mDEBUG:\e[0m %s\n" "${1}"
