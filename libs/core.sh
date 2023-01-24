@@ -110,7 +110,7 @@ function get_def_gw {
 }
 
 function check_connection {
-    ping -D -c"${1}" "${2}" 2> /dev/null | \
+    ping -D -c"${1}" "${2}" 2>&1 | \
     tail -n1 | sed 's/rtt/Triptime:/'
 }
 
