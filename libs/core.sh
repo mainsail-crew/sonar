@@ -139,10 +139,10 @@ function setup_env {
 
 function keepalive {
     local triptime
-    triptime="$(check_connection "${SONAR_PING_COUNT}" "${SONAR_TARGET}")"
     if [[ "${SONAR_SETUP_COMPLETE}" != "1" ]]; then
         setup_env
     fi
+    triptime="$(check_connection "${SONAR_PING_COUNT}" "${SONAR_TARGET}")"
     if [[ -n "${triptime}" ]]; then
         if [[ "${SONAR_DEBUG_LOG}" == "true" ]]; then
             log_msg "Reached ${SONAR_TARGET}, ${triptime}"
