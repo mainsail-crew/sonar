@@ -42,6 +42,10 @@ function init_setup_vars {
     SNR_LOCAL_VERSION="$(self_version)"
     declare -rx SNR_LOCAL_VERSION
 
+    # Configuration File
+    SONAR_CFG="$(get_config_path)"
+    declare -r SONAR_CFG
+
     # Logging
     SNR_PERSISTANT_LOG="$(get_param sonar persistant_log)"
     declare -r SNR_PERSISTANT_LOG

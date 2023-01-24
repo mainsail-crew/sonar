@@ -16,11 +16,6 @@
 # Exit on Errors
 set -Ee
 
-
-# Configuration File
-SONAR_CFG="$(get_config_path)"
-declare -r SONAR_CFG
-
 # Read Configuration File
 # call get_param section param
 # spits out raw value
