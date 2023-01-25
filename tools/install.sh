@@ -113,7 +113,8 @@ import_config() {
 
 create_filestructure() {
     for i in "${SONAR_CONFIG_PATH}" "${SONAR_LOG_PATH%/*.*}"; do
-        if [[ ! -d "${i}" ]]; then
+        if [[ ! -d "${i}" ]] && [[ ! -L "${i}" ]]; then
+            sudo -u "${BASE_USER}" \
             mkdir -p "${i}"
         fi
     done
