@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 #### Core library
 
@@ -51,39 +51,21 @@ function shutdown {
     exit 0
 }
 
-# Service disabled by user
-function enable_service {
-    local config service
-    config="${BASE_USER_HOME}/klipper_config/sonar.conf"
+# Service disabled by default
+function run_service {
+    local service
     service="$(get_param sonar enable)"
-    if [ -f "${config}" ] && [ "${service}" == "false" ]; then
-        log_msg "Sonar.service disabled by user configuration"
-        log_msg "Service will be halted until next reboot"
-        systemctl stop sonar.service
-    fi
-}
-
-## Sanity Checks
-# Check for config file
-function check_cfg {
-    local config new_path old_path
-    new_path="${BASE_USER_HOME}/printer_data/sonar.conf"
-    old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
-    if [[ -d "${new_path}" ]] && [[ ! -d "${old_path}" ]]; then
-        config="${new_path}"
-    fi
-    if [[ -d "${old_path}" ]] && [[ ! -d "${new_path}" ]]; then
-        config="${old_path}"
-    fi
-    if [ -z "${SONAR_CFG}" ] &&
-    [ -f "${config}" ]; then
-        SONAR_CFG="${config}"
-        log_msg "INFO: Found config file ${SONAR_CFG}, import settings."
-        print_cfg
-        setup_user_conf
-    else
-        log_msg "INFO: No config file found, using defaults."
-        setup_defaults
+    if [[ "${service}" == "false" ]]; then
+        log_msg "Sonar.service disabled by configuration ..."
+        if [[ "$(systemctl is-active sonar.service 2> /dev/null)" != "inactive" ]]; then
+            log_msg "INFO: Service will be halted until next reboot ..."
+            log_msg "INFO: GoodBye ..."
+            systemctl stop sonar.service
+        else
+            log_msg "WARN: Sonar Service already inactive ..."
+            log_msg "INFO: Exiting! GoodBye ..."
+            exit 0
+        fi
     fi
 }
 
@@ -100,14 +82,12 @@ function check_dep {
     fi
 }
 
-# Check all needed Dependencies
+# Initial Check
 function initial_check {
     log_msg "INFO: Checking Dependencys"
     check_dep "crudini"
-    check_dep "logger"
-    check_cfg
     check_eth_con
-    enable_service
+    run_service
 }
 
 # Check if eth0 is used.
@@ -129,65 +109,99 @@ function get_def_gw {
     fi
 }
 
-# default settings
-function setup_defaults {
-    SONAR_TARGET="$(get_def_gw)"
-    export SONAR_TARGET
-    export SONAR_PING_COUNT="3"
-    export SONAR_CHECK_INTERVAL="60"
-    export SONAR_RESTART_TRESHOLD="10"
-}
-
-# setup user config
-function setup_user_conf {
-    local target count interval treshold
-    target=$(get_param sonar target)
-    count=$(get_param sonar count)
-    interval=$(get_param sonar interval)
-    treshold=$(get_param sonar restart_treshold)
-    if [ "${target}" == "auto" ]; then
+function setup_env {
+    local target
+    target="$(get_param sonar target)"
+    # Use default values if parameter is missing
+    if [[ "${target}" == "auto" ]]; then
         SONAR_TARGET="$(get_def_gw)"
-        export SONAR_TARGET
     else
-        export SONAR_TARGET="${target}"
+        SONAR_TARGET="${target}"
     fi
-    # using defaults if empty
-    if [ -n "${count}" ]; then
-        export SONAR_PING_COUNT="${count}"
-    else
-        export SONAR_PING_COUNT="3"
-    fi
-    if [ -n "${interval}" ]; then
-        export SONAR_CHECK_INTERVAL="${interval}"
-    else
-        export SONAR_CHECK_INTERVAL="60"
-    fi
-    if [ -n "${treshold}" ]; then
-        export SONAR_RESTART_TRESHOLD="${treshold}"
-    else
-        export SONAR_RESTART_TRESHOLD="10"
+    SONAR_PING_COUNT="$(get_param sonar count)"
+    SONAR_CHECK_INTERVAL="$(get_param sonar interval)"
+    SONAR_RESTART_TRESHOLD="$(get_param sonar restart_treshold)"
+    SONAR_DEBUG_LOG="$(get_param sonar debug_log)"
+    declare -r SONAR_TARGET
+    declare -r SONAR_PING_COUNT
+    declare -r SONAR_CHECK_INTERVAL
+    declare -r SONAR_RESTART_TRESHOLD
+    declare -r SONAR_DEBUG_LOG
+
+    # Set vars only once!
+    SONAR_SETUP_COMPLETE=1
+    declare -r SONAR_SETUP_COMPLETE
+}
+
+# Restart commands
+function restart_networkmanager {
+    if systemctl -q is-active NetworkManager ; then
+        log_msg "Restarting NetworkManager service ..."
+        systemctl stop NetworkManager.service
+        sleep 30
+        systemctl start NetworkManager.service
     fi
 }
 
-function check_connection {
-    ping -D -c"${SONAR_PING_COUNT}" "${SONAR_TARGET}" 2> /dev/null | \
-    tail -n1 | sed 's/rtt/Triptime:/'
+function restart_rpi_default {
+    if [[ -n "$(command -v wpa_cli)" ]]; then
+        log_msg "Reassociate WiFi connection ..."
+        wpa_cli -i wlan0 reassociate &> /dev/null
+    fi
+    if [[ "$(systemctl is-active dhcpcd.service)" = "active" ]] ; then
+        log_msg "Restarting dhcpcd service ..."
+        systemctl restart dhcpcd
+    fi
+}
+
+function run_restart_command {
+    local check_dhcpcd check_networkman
+    check_dhcpcd="$(systemctl is-enabled dhcpcd 2> /dev/null || true)"
+    check_networkman="$(systemctl is-enabled NetworkManager 2> /dev/null || true)"
+    if [[ "${check_dhcpcd}" = "enabled" ]] &&
+        [[ "${check_networkman}" = "disabled" ]]; then
+        restart_rpi_default
+    fi
+    if [[ "${check_dhcpcd}" = "disabled" ]] &&
+        [[ "${check_networkman}" = "enabled" ]]; then
+        restart_networkmanager
+    fi
+    return 0
 }
 
 function keepalive {
-    local triptime
-    triptime="$(check_connection)"
-    if [ -n "${triptime}" ]; then
-        if [ "$(debug_log)" == "true" ]; then
+    local counter triptime
+    if [[ "${SONAR_SETUP_COMPLETE}" != "1" ]]; then
+        setup_env
+    fi
+
+    counter=0
+    # Store triptime if ! failed
+    triptime="$(ping -c"${SONAR_PING_COUNT:-3}" "${SONAR_TARGET}" | \
+        tail -n1 | sed '/pipe.*/d;s/rtt/Triptime:/')"
+
+    if [[ -n "${triptime}" ]]; then
+        if [[ "${SONAR_DEBUG_LOG:-false}" == "true" ]]; then
             log_msg "Reached ${SONAR_TARGET}, ${triptime}"
         fi
     else
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
-        log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD} seconds."
-        ifconfig wlan0 down
-        sleep "${SONAR_RESTART_TRESHOLD}"
-        ifconfig wlan0 up
-        log_msg "Waiting 10 seconds to re-establish connection."
-        sleep 10
+        log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD:-10} seconds."
+        sleep "${SONAR_RESTART_TRESHOLD:-10}"
+        until ping -c1 "${SONAR_TARGET}" > /dev/null; do
+            counter=$((counter+1))
+            run_restart_command
+            log_msg "Waiting 10 seconds to re-establish connection ..."
+            sleep 10
+            if [[ "${counter}" -eq 3 ]]; then
+                log_msg "WARN: Reconnect failed after ${counter} retries ..."
+                log_msg "Attempt paused for ${SONAR_CHECK_INTERVAL:-60} seconds."
+                sleep "${SONAR_CHECK_INTERVAL:-60}"
+                # reset counter
+                counter=0
+            fi
+        done
+        log_msg "INFO: Retry count: ${counter}"
     fi
+    sleep "${SONAR_CHECK_INTERVAL:-60}"
 }

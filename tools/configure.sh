@@ -10,6 +10,7 @@
 ####
 
 # shellcheck enable=require-variable-braces
+# shellcheck disable=SC2317
 
 # Exit on errors
 set -Ee

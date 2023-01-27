@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 #### Configparser library
 
@@ -20,10 +20,9 @@ set -Ee
 # call get_param section param
 # spits out raw value
 function get_param {
-    local cfg section param
-    cfg="${SONAR_CFG}"
+    local section param
     section="${1}"
     param="${2}"
-    crudini --get "${cfg}" "${section}" "${param}" 2> /dev/null | \
+    crudini --get "$(get_config_path)" "${section}" "${param}" 2> /dev/null | \
     sed 's/\#.*//;s/[[:space:]]*$//'
 }

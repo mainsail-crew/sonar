@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #### Logging library
 
@@ -23,31 +23,35 @@ function debug_log {
 
 function init_log_entry {
     log_msg "Sonar - A WiFi Keepalive daemon"
-    log_msg "Version: $(self_version)"
+    log_msg "Version: ${SNR_LOCAL_VERSION}"
     log_msg "Prepare Startup ..."
+    if [[ "$(debug_log)" != "false" ]]; then
+        print_cfg
+    fi
+}
+
+function print_cfg {
+    local prefix strip
+    prefix="\t\t"
+    log_msg "INFO: Print Configfile: '$(get_config_path)'"
+    while read -r line; do
+        strip="$(sed 's/^##.*//g;s/#[[:space:]].*//g' <<< "${line}")"
+        if [[ -n "${strip}" ]]; then
+            log_msg "${prefix}${strip}"
+        fi
+    done < "$(get_config_path)"
 }
 
 function log_msg {
     local msg prefix
     msg="${1}"
-    if [ "$(get_param sonar persistant_log)" == "true" ]; then
+    if [[ "${SNR_PERSISTANT_LOG}" == "true" ]]; then
         # make sure file exists
         if [ ! -f "${SNR_LOG_PATH}" ]; then
             touch "${SNR_LOG_PATH}"
         fi
-        prefix="$(date +'[%D %T]') sonar:"
+        prefix="$(date +'[%D %T]') "
         echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
     fi
-    echo -e "${msg}" | logger -t sonar
+    echo -e "${msg}"
 }
-
-function print_cfg {
-    local prefix
-    prefix="\t\t"
-    log_msg "INFO: Print Configfile: '${SONAR_CFG}'"
-    while read -r line; do
-        log_msg "${prefix}${line}"
-    done < "${SONAR_CFG}"
-    log_msg "\n"
-}
-

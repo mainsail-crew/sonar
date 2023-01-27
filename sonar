@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 #### Sonar - A WiFi Keepalive daemon
 ####
 #### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
@@ -13,47 +13,73 @@
 # Exit on Errors
 set -Ee
 
-# Make sure script runs with root priviledges
-if [ "$(id -u)" != "0" ]; then
-    echo -e "\nSonar - A WiFi Keepalive daemon\n"
-    echo -e "This Script is not intended to run as ${USER}!\n"
-    echo -e "ERROR: Reporting to log and exiting."
-    exit 1
-fi
-
-# Base Paths
-BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
-BASE_USER_HOME="$(dirname "${BASE_SNR_PATH}")"
-export BASE_USER_HOME
-SNR_LOG_PATH="/var/log/sonar.log"
-export SNR_LOG_PATH
-
-# General configuration is done by function setup_defaults
-# See libs/core.sh L#100
+## Helper funcs
+# Declare vars
+function init_local_vars {
+    # Base Paths
+    BASE_SNR_PATH="$(dirname "$(readlink -f "${0}")")"
+    declare -r BASE_SNR_PATH
+    BASE_USER_HOME="$(dirname "$(dirname "$(readlink -f "${0}")")")"
+    declare -r BASE_USER_HOME
+    SNR_LOG_PATH="/var/log/sonar.log"
+    declare -r SNR_LOG_PATH
+}
 
 ## Import Librarys
-# shellcheck source-path=SCRIPTDIR/libs/
-source "${BASE_SNR_PATH}/libs/configparser.sh"
-source "${BASE_SNR_PATH}/libs/core.sh"
-source "${BASE_SNR_PATH}/libs/logging.sh"
-source "${BASE_SNR_PATH}/libs/messages.sh"
+function import_libs {
+    # shellcheck source-path=SCRIPTDIR/libs/
+    source "${BASE_SNR_PATH}/libs/configparser.sh"
+    source "${BASE_SNR_PATH}/libs/core.sh"
+    source "${BASE_SNR_PATH}/libs/get_config.sh"
+    source "${BASE_SNR_PATH}/libs/logging.sh"
+    source "${BASE_SNR_PATH}/libs/messages.sh"
+}
 
-#### MAIN
+## Initialize setup Variables
+function init_setup_vars {
+    # Set setup scope variables
+    # Version
+    SNR_LOCAL_VERSION="$(self_version)"
+    declare -r SNR_LOCAL_VERSION
+
+    # Logging
+    SNR_PERSISTANT_LOG="$(get_param sonar persistant_log)"
+    declare -r SNR_PERSISTANT_LOG
+}
+
+    # init_log_entry
+    # initial_check
+    # while true; do
+    #     keepalive
+    #     sleep "${SONAR_CHECK_INTERVAL}"
+    # done
+
+
+#### MAIN #####
+# Step 1: Initialize script global variables
+init_local_vars
+
+# Step 2: Import Libraries
+import_libs
+
+# Step 3: Parse Arguments
 ## Args given?
-if [ "$#" -ne 0 ]; then
+if [[ "$#" -ne 0 ]]; then
     ## Parse Args
-    while getopts ":vhc:" arg; do
+    while getopts ":dvh" arg; do
         case "${arg}" in
+            d )
+                printf "\e[33mWARN: \e[0mRunnig sonar in Debug Mode ...\n"
+                SONAR_DEBUG="1"
+                set -x
+            ;;
             v )
-                echo -e "\nSonar Version: $(self_version)\n"
+                printf "Sonar Version: \e[34m%s\e[0m\n" "$(self_version)"
                 exit 0
             ;;
             h )
                 help_msg
                 exit 0
-            ;;
-            c )
-                export SONAR_CFG="${OPTARG}"
             ;;
             \?)
                 wrong_args_msg
@@ -63,11 +89,25 @@ if [ "$#" -ne 0 ]; then
     done
 fi
 
+# Step 4: Make sure script runs with root priviledges
+if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
+    do_run_as_root_msg
+    exit 1
+fi
+
+# Step 5: Initialize Setup Variables
+init_setup_vars
+
+# Step 6: Initialize logging
 init_log_entry
+
+# Step 7: Initial Check
 initial_check
+
+# Step X: Loop
 while true; do
     keepalive
-    sleep "${SONAR_CHECK_INTERVAL}"
+    sleep 10
 done
 
 exit 0
