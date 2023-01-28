@@ -170,12 +170,15 @@ function run_restart_command {
 }
 
 function keepalive {
-    local counter triptime
+    local retry_count triptime used_retries
+
+    used_retries=0
+    retry_count=0
+
     if [[ "${SONAR_SETUP_COMPLETE}" != "1" ]]; then
         setup_env
     fi
 
-    counter=0
     # Store triptime if ! failed
     triptime="$(ping -c"${SONAR_PING_COUNT:-3}" "${SONAR_TARGET}" | \
         tail -n1 | sed '/pipe.*/d;s/rtt/Triptime:/')"
@@ -189,19 +192,22 @@ function keepalive {
         log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD:-10} seconds."
         sleep "${SONAR_RESTART_TRESHOLD:-10}"
         until ping -c1 "${SONAR_TARGET}" > /dev/null; do
-            counter=$((counter+1))
+            used_retries=$(( used_retries+1 ))
+            retry_count=$((retry_count+1))
             run_restart_command
             log_msg "Waiting 10 seconds to re-establish connection ..."
             sleep 10
-            if [[ "${counter}" -eq 3 ]]; then
-                log_msg "WARN: Reconnect failed after ${counter} retries ..."
+            if [[ "${retry_count}" -eq 3 ]]; then
+                log_msg "WARN: Reconnect failed after ${retry_count} retries ..."
                 log_msg "Attempt paused for ${SONAR_CHECK_INTERVAL:-60} seconds."
                 sleep "${SONAR_CHECK_INTERVAL:-60}"
-                # reset counter
-                counter=0
+                # reset retry_count
+                retry_count=0
             fi
         done
-        log_msg "INFO: Retry count: ${counter}"
+        log_msg "INFO: Retry count: ${used_retries}"
+        # reset used_retries
+        used_retries=0
     fi
     sleep "${SONAR_CHECK_INTERVAL:-60}"
 }
