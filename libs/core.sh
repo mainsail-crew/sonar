@@ -154,8 +154,9 @@ function restart_rpi_default {
 
 function run_restart_command {
     local check_dhcpcd check_networkman
-    check_dhcpcd="$(systemctl is-enabled dhcpcd)"
-    check_networkman="$(systemctl is-enabled NetworkManager)"
+
+    check_dhcpcd="$(systemctl is-enabled dhcpcd 2> /dev/null || echo "disabled")"
+    check_networkman="$(systemctl is-enabled NetworkManager 2> /dev/null || echo "disabled")"
     if [[ "${check_dhcpcd}" = "enabled" ]] &&
         [[ "${check_networkman}" = "disabled" ]]; then
         restart_rpi_default
