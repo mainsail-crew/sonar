@@ -137,9 +137,7 @@ function setup_env {
 function restart_networkmanager {
     if systemctl -q is-active NetworkManager ; then
         log_msg "Restarting NetworkManager service ..."
-        systemctl stop NetworkManager.service
-        sleep 30
-        systemctl start NetworkManager.service
+        systemctl restart NetworkManager.service
     fi
 }
 
