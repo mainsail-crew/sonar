@@ -154,8 +154,8 @@ function restart_rpi_default {
 
 function run_restart_command {
     local check_dhcpcd check_networkman
-    check_dhcpcd="$(systemctl is-enabled dhcpcd 2> /dev/null || true)"
-    check_networkman="$(systemctl is-enabled NetworkManager 2> /dev/null || true)"
+    check_dhcpcd="$(systemctl is-enabled dhcpcd)"
+    check_networkman="$(systemctl is-enabled NetworkManager)"
     if [[ "${check_dhcpcd}" = "enabled" ]] &&
         [[ "${check_networkman}" = "disabled" ]]; then
         restart_rpi_default
@@ -190,7 +190,7 @@ function keepalive {
         log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD:-10} seconds."
         sleep "${SONAR_RESTART_TRESHOLD:-10}"
         until ping -c1 "${SONAR_TARGET}" > /dev/null; do
-            used_retries=$(( used_retries+1 ))
+            used_retries=$((used_retries+1))
             retry_count=$((retry_count+1))
             run_restart_command
             log_msg "Waiting 10 seconds to re-establish connection ..."
