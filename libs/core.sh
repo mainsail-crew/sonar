@@ -16,7 +16,7 @@
 # Exit on Errors
 set -Ee
 
-## Version of webcamd
+## get version
 function self_version {
     pushd "${BASE_SNR_PATH}" &> /dev/null || exit 1
     git describe --always --tags 2> /dev/null || echo "unknown"
