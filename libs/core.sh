@@ -18,8 +18,10 @@ set -Ee
 
 ## get version
 function self_version {
+    local owner
+    owner="$(find "${BASE_SNR_PATH}" -printf '%u\n' | head -n1)"
     pushd "${BASE_SNR_PATH}" &> /dev/null || exit 1
-    git describe --always --tags 2> /dev/null || echo "unknown"
+    sudo -u "${owner}" git describe --always --tags 2> /dev/null || echo "unknown"
     popd &> /dev/null || exit 1
 }
 
