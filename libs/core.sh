@@ -108,7 +108,7 @@ function get_def_gw {
     if [ "$(cat /sys/class/net/wlan0/operstate)" == "up" ]; then
         default_gw="$(ip route | awk 'NR==1 {print $3}')"
         echo "${default_gw}"
-        if [ -z "$default_gw" ]; then
+        if [ -z "${default_gw}" ]; then
             log_msg "WARN: Cannot get the default gateway. Restarting service..."
             sleep 5
             systemctl restart sonar.service
