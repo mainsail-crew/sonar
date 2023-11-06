@@ -35,6 +35,11 @@ to your moonraker.conf
 You are able to configure it's behavior due a file in "printer_data/config/sonar.conf".\
 But you don't have to. Defaults are hardcoded and sonar will run without any configuration.\
 
+_**Hint: sonar's configuration file is based on [TOML](https://toml.io/en/) other than in TOML colon's are also valid (and prettier :) ).**_
+_**Therefore a leading section descriptor is crucial!**_
+
+    [sonar]
+
 ### Options
 
     enable: true
