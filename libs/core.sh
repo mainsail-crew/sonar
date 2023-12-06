@@ -131,12 +131,15 @@ function setup_env {
     fi
     SONAR_PING_COUNT="$(get_param sonar count)"
     SONAR_CHECK_INTERVAL="$(get_param sonar interval)"
-    SONAR_RESTART_TRESHOLD="$(get_param sonar restart_treshold)"
+    SONAR_RESTART_THRESHOLD="$(get_param sonar restart_threshold)"
+    if [[ -z "${SONAR_RESTART_THRESHOLD}" ]]; then
+        SONAR_RESTART_THRESHOLD="$(get_param sonar restart_treshold)"
+    fi
     SONAR_DEBUG_LOG="$(get_param sonar debug_log)"
     declare -r SONAR_TARGET
     declare -r SONAR_PING_COUNT
     declare -r SONAR_CHECK_INTERVAL
-    declare -r SONAR_RESTART_TRESHOLD
+    declare -r SONAR_RESTART_THRESHOLD
     declare -r SONAR_DEBUG_LOG
 
     # Set vars only once!
@@ -216,8 +219,8 @@ function keepalive {
         fi
     else
         log_msg "Connection lost, ${SONAR_TARGET} not reachable!"
-        log_msg "Restarting network in ${SONAR_RESTART_TRESHOLD:-10} seconds."
-        sleep "${SONAR_RESTART_TRESHOLD:-10}"
+        log_msg "Restarting network in ${SONAR_RESTART_THRESHOLD:-10} seconds."
+        sleep "${SONAR_RESTART_THRESHOLD:-10}"
         until ping -c1 "${SONAR_TARGET}" > /dev/null; do
             used_retries=$((used_retries+1))
             retry_count=$((retry_count+1))
