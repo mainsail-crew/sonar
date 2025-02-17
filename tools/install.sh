@@ -21,7 +21,7 @@ TITLE="Sonar - A WiFi Keepalive daemon"
 [[ -n "${BASE_USER}" ]] || BASE_USER="$(whoami)"
 [[ -n "${SONAR_UNATTENDED}" ]] || SONAR_UNATTENDED="0"
 [[ -n "${SONAR_INSTALL_SERVICE}" ]] || SONAR_INSTALL_SERVICE="1"
-[[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="$(dirname "$0")/resources/sonar.conf"
+[[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="resources/sonar.conf"
 
 # handle options like -x and -c
 while getopts "dsx:" opt; do
