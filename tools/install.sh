@@ -24,7 +24,7 @@ TITLE="Sonar - A WiFi Keepalive daemon"
 [[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="resources/sonar.conf"
 
 # handle options like -x and -c
-while getopts "dsx:" opt; do
+while getopts "d:sx" opt; do
     case ${opt} in
         d)
             SONAR_DATA_PATH="${OPTARG}"
