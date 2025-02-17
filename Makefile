@@ -25,12 +25,20 @@ help:
 	@echo "   uninstall    Uninstalls sonar"
 	@echo "   config       configure installer"
 	@echo ""
+	@echo "  Available options for install:"
+	@echo "   -d          Set custom data directory (for example -d /home/user/printer_data)"
+	@echo "   -s          Skip installation of service file"
+	@echo "   -x          Unattended installation"
+	@echo ""
+
+install:
+	@bash tools/install.sh $(filter-out $@,$(MAKECMDGOALS))
+
+%:
+	@:
 
 config:
 	@bash -c 'tools/configure.sh'
-
-install:
-	@bash -c 'tools/install.sh'
 
 uninstall:
 	@bash -c 'tools/uninstall.sh'

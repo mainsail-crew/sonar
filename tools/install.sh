@@ -20,7 +20,35 @@ set -Ee
 TITLE="Sonar - A WiFi Keepalive daemon"
 [[ -n "${BASE_USER}" ]] || BASE_USER="$(whoami)"
 [[ -n "${SONAR_UNATTENDED}" ]] || SONAR_UNATTENDED="0"
-[[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="resources/sonar.conf"
+[[ -n "${SONAR_INSTALL_SERVICE}" ]] || SONAR_INSTALL_SERVICE="1"
+[[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="$(dirname "$0")/resources/sonar.conf"
+
+# handle options like -x and -c
+while getopts "dsx:" opt; do
+    case ${opt} in
+        d)
+            SONAR_DATA_PATH="${OPTARG}"
+            echo -e "Set Data Path: ${SONAR_DATA_PATH}"
+            ;;
+        s)
+            SONAR_INSTALL_SERVICE="0"
+            echo -e "Set skipping service installation"
+            ;;
+        x)
+            SONAR_UNATTENDED="1"
+            echo -e "Set unattended mode"
+            ;;
+        *)
+            echo "Usage: $0 [-d <data_path>] [-s] [-x]"
+            exit 1
+            ;;
+    esac
+done
+
+if [[ -n "${SONAR_DATA_PATH}" ]]; then
+    SONAR_CONFIG_PATH="${SONAR_DATA_PATH}/config"
+    SONAR_LOG_PATH="${SONAR_DATA_PATH}/config"
+fi
 
 # Message Vars
 CN_OK="\e[32mOK\e[0m"
@@ -274,7 +302,11 @@ main() {
     install_sonar
 
     ## Step 4: Install service File
-    install_service_file
+    if [[ "${SONAR_INSTALL_SERVICE}" = "1" ]]; then
+        install_service_file
+    else
+        echo -e "Skipping installation of service file ... [${CN_SK}]"
+    fi
 
     ## Step 5: Enable service
     if [[ -f /etc/systemd/system/sonar.service ]] &&
@@ -290,8 +322,7 @@ main() {
     install_logrotate
 
     ## Step 7: Add moonraker update_manager entry
-    if [[ "${SONAR_UNATTENDED}" = "1" ]] ||
-    [[ "${SONAR_ADD_SONAR_MOONRAKER}" = "1" ]]; then
+    if [[ "${SONAR_ADD_SONAR_MOONRAKER}" = "1" ]]; then
         add_update_entry
     fi
 
