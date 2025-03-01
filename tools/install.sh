@@ -23,23 +23,22 @@ TITLE="Sonar - A WiFi Keepalive daemon"
 [[ -n "${SONAR_INSTALL_SERVICE}" ]] || SONAR_INSTALL_SERVICE="1"
 [[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="resources/sonar.conf"
 
-# handle options like -x and -c
-while getopts "d:sx" opt; do
-    case ${opt} in
-        d)
-            SONAR_DATA_PATH="${OPTARG}"
+for arg in "$@"; do
+    case ${arg} in
+        DATA_PATH=*)
+            SONAR_DATA_PATH="${arg#*=}"
             echo -e "Set Data Path: ${SONAR_DATA_PATH}"
             ;;
-        s)
-            SONAR_INSTALL_SERVICE="0"
-            echo -e "Set skipping service installation"
+        INSTALL_SERVICE=*)
+            SONAR_INSTALL_SERVICE="${arg#*=}"
+            echo -e "Set service installation to: ${SONAR_INSTALL_SERVICE}"
             ;;
-        x)
-            SONAR_UNATTENDED="1"
-            echo -e "Set unattended mode"
+        UNATTENDED=*)
+            SONAR_UNATTENDED="${arg#*=}"
+            echo -e "Set unattended mode to: ${SONAR_UNATTENDED}"
             ;;
         *)
-            echo "Usage: $0 [-d <data_path>] [-s] [-x]"
+            echo "Usage: $0 [DATA_PATH=<data_path>] [INSTALL_SERVICE=<0|1>] [UNATTENDED=<0|1>]"
             exit 1
             ;;
     esac

@@ -7,6 +7,11 @@
 #### This File is distributed under GPLv3
 ####
 
+# Default values for the install script
+DATA_PATH ?= /home/${whoami}/printer_data
+INSTALL_SERVICE ?= 1
+UNATTENDED ?= 0
+
 .PHONY: config help install uninstall
 
 all: help
@@ -30,12 +35,17 @@ help:
 	@echo "   -s          Skip installation of service file"
 	@echo "   -x          Unattended installation"
 	@echo ""
+	@echo "  Available options for install:"
+	@echo "   DATA_PATH=<path>    Set custom data directory (for example DATA_PATH=/home/user/printer_data)"
+	@echo "   INSTALL_SERVICE=0   Skip installation of service file"
+	@echo "   UNATTENDED=1        Unattended installation"
+	@echo ""
 
 install:
-	@bash tools/install.sh $(filter-out $@,$(MAKECMDGOALS))
-
-%:
-	@:
+	@bash tools/install.sh \
+		DATA_PATH=$(DATA_PATH) \
+		INSTALL_SERVICE=$(INSTALL_SERVICE) \
+		UNATTENDED=$(UNATTENDED)
 
 config:
 	@bash -c 'tools/configure.sh'
