@@ -8,7 +8,7 @@
 ####
 
 # Default values for the install script
-DATA_PATH ?= /home/${whoami}/printer_data
+
 INSTALL_SERVICE ?= 1
 UNATTENDED ?= 0
 

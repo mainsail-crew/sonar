@@ -26,8 +26,10 @@ TITLE="Sonar - A WiFi Keepalive daemon"
 for arg in "$@"; do
     case ${arg} in
         DATA_PATH=*)
-            SONAR_DATA_PATH="${arg#*=}"
-            echo -e "Set Data Path: ${SONAR_DATA_PATH}"
+            if [[ -d "${arg#*=}" ]]; then
+                SONAR_DATA_PATH="${arg#*=}"
+                echo -e "Set Data Path: ${SONAR_DATA_PATH}"
+            fi
             ;;
         INSTALL_SERVICE=*)
             SONAR_INSTALL_SERVICE="${arg#*=}"
