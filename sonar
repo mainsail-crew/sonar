@@ -25,7 +25,7 @@ function init_local_vars {
     declare -r SNR_LOG_PATH
 }
 
-## Import Librarys
+## Import Libraries
 function import_libs {
     # shellcheck source-path=SCRIPTDIR/libs/
     source "${BASE_SNR_PATH}/libs/configparser.sh"
