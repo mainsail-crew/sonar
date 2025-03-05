@@ -22,36 +22,37 @@ function debug_log {
 }
 
 function init_log_entry {
-    log_msg "Sonar - A WiFi Keepalive daemon"
-    log_msg "Version: ${SNR_LOCAL_VERSION}"
-    log_msg "Prepare Startup ..."
-    if [[ "$(debug_log)" != "false" ]]; then
-        print_cfg
-    fi
+    log_msg "INFO: Sonar - A WiFi Keepalive daemon"
+    log_msg "INFO: Version: ${SNR_LOCAL_VERSION}"
+    log_msg "INFO: Prepare Startup ..."
+    # print config when debug_log is set
+    [[ "$(debug_log)" != "false" ]] && print_cfg
 }
 
 function print_cfg {
-    local prefix strip
-    prefix="\t\t"
+    local prefix="\t\t"
     log_msg "INFO: Print Configfile: '$(get_config_path)'"
+
     while read -r line; do
-        strip="$(sed 's/^##.*//g;s/#[[:space:]].*//g' <<< "${line}")"
-        if [[ -n "${strip}" ]]; then
-            log_msg "${prefix}${strip}"
-        fi
+        local strip
+        # remove comments
+        strip=$(echo "${line}" | sed 's/^##.*//g;s/#[[:space:]].*//g')
+
+        # only print non-empty lines
+        [[ -n "${strip}" ]] && log_msg "${prefix}${strip}"
     done < "$(get_config_path)"
 }
 
 function log_msg {
-    local msg prefix
-    msg="${1}"
-    if [[ "${SNR_PERSISTANT_LOG}" == "true" ]]; then
-        # make sure file exists
-        if [ ! -f "${SNR_LOG_PATH}" ]; then
-            touch "${SNR_LOG_PATH}"
-        fi
-        prefix="$(date +'[%D %T]') "
-        echo -e "${prefix} ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
-    fi
+    local msg="${1}"
     echo -e "${msg}"
+
+    # Stop here if no persistant log is set
+    [[ "${SNR_PERSISTANT_LOG}" != "true" ]] && return
+
+    # make sure file exists
+    [[ ! -f "${SNR_LOG_PATH}" ]] && touch "${SNR_LOG_PATH}"
+
+    # write to logfile with timestamp
+    echo -e "$(date +'[%D %T]') ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
 }
