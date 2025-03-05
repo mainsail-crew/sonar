@@ -290,8 +290,7 @@ main() {
     install_logrotate
 
     ## Step 7: Add moonraker update_manager entry
-    if [[ "${SONAR_UNATTENDED}" = "1" ]] ||
-    [[ "${SONAR_ADD_SONAR_MOONRAKER}" = "1" ]]; then
+    if [[ "${SONAR_ADD_SONAR_MOONRAKER}" = "1" ]]; then
         add_update_entry
     fi
 
