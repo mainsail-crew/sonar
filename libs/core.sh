@@ -105,7 +105,7 @@ function check_eth_con {
 # get default gw
 function get_def_gw {
     local default_gw
-    if [ "$(cat /sys/class/net/wlan0/operstate)" == "up" ]; then
+    if [ "$(cat /sys/class/net/wlan*/operstate | grep 'up' -m 1)" == "up" ]; then
         default_gw="$(ip route | awk 'NR==1 {print $3}')"
         echo "${default_gw}"
         if [ -z "${default_gw}" ]; then
