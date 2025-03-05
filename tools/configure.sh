@@ -160,6 +160,10 @@ specify_config_path() {
         "${SR_CONFIG_CONFIGFILE}"
         return 0
     fi
+    if [[ -n "${reply}" ]]; then
+        echo -e "SONAR_CONFIG_PATH=\"${reply}\"" >> "${SR_CONFIG_CONFIGFILE}"
+        return 0
+    fi
 }
 
 specify_log_path() {
