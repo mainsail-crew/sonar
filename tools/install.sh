@@ -264,6 +264,12 @@ main() {
         import_config
     fi
 
+    ## Set default paths from DATA_PATH (this is used in MainsailOS)
+    if [[ -n "${SONAR_DATA_PATH}" ]]; then
+        SONAR_CONFIG_PATH="${SONAR_DATA_PATH}/config"
+        SONAR_LOG_PATH="${SONAR_DATA_PATH}/logs"
+    fi
+
     ## Make sure folders exist
     create_filestructure
 
