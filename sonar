@@ -69,7 +69,7 @@ if [[ "$#" -ne 0 ]]; then
     while getopts ":dvh" arg; do
         case "${arg}" in
             d )
-                printf "\e[33mWARN: \e[0mRunnig sonar in Debug Mode ...\n"
+                printf "\e[33mWARN: \e[0mRunning sonar in Debug Mode ...\n"
                 SONAR_DEBUG="1"
                 set -x
             ;;
