@@ -31,7 +31,6 @@ SR_CONFIG_ROOTPATH="/home/${SR_CONFIG_USER}/printer_data"
 SR_CONFIG_CONFIGPATH="${SR_CONFIG_ROOTPATH}/config"
 SR_CONFIG_LOGPATH="${SR_CONFIG_ROOTPATH}/logs"
 SR_CONFIG_ENVPATH="${SR_CONFIG_ROOTPATH}/systemd"
-SR_MOONRAKER_CONFIG_PATH="${SR_CONFIG_CONFIGPATH}/moonraker.conf"
 
 ### Messages
 header_msg() {
@@ -156,16 +155,12 @@ specify_config_path() {
     config_path_msg
     default_path_msg
     read -erp "Please enter path: " reply
-    if [[ -z "${reply}" ]]; then
-        echo -e "SONAR_CONFIG_PATH=\"${SR_CONFIG_CONFIGPATH}\"" >> \
-        "${SR_CONFIG_CONFIGFILE}"
-        return 0
-    fi
+
     if [[ -n "${reply}" ]]; then
-        echo -e "SONAR_CONFIG_PATH=\"${reply}\"" >> "${SR_CONFIG_CONFIGFILE}"
-        SR_MOONRAKER_CONFIG_PATH="${reply}/moonraker.conf"
-        return 0
+        SR_CONFIG_CONFIGPATH=${reply}
     fi
+
+    echo -e "SONAR_CONFIG_PATH=\"${SR_CONFIG_CONFIGPATH}\"" >> "${SR_CONFIG_CONFIGFILE}"
 }
 
 specify_log_path() {
@@ -173,15 +168,12 @@ specify_log_path() {
     log_path_msg
     default_path_msg
     read -erp "Please enter path: " reply
-    if [[ -z "${reply}" ]]; then
-        echo -e "SONAR_LOG_PATH=\"${SR_CONFIG_LOGPATH}\"" >> \
-        "${SR_CONFIG_CONFIGFILE}"
-        return 0
-    fi
+
     if [[ -n "${reply}" ]]; then
-        echo -e "SONAR_LOG_PATH=\"${reply}\"" >> "${SR_CONFIG_CONFIGFILE}"
-        return 0
+        SR_CONFIG_LOGPATH=${reply}
     fi
+
+    echo -e "SONAR_LOG_PATH=\"${SR_CONFIG_LOGPATH}\"" >> "${SR_CONFIG_CONFIGFILE}"
 }
 
 add_moonraker_entry() {
@@ -192,8 +184,6 @@ add_moonraker_entry() {
         case "${reply}" in
             [yY]*)
                 echo -e "SONAR_ADD_SONAR_MOONRAKER=\"1\"" >> "${SR_CONFIG_CONFIGFILE}"
-                echo "SONAR_MOONRAKER_CONF_PATH=\"${SR_MOONRAKER_CONFIG_PATH}\"" \
-                >> "${SR_CONFIG_CONFIGFILE}"
                 break
             ;;
             [nN]*)

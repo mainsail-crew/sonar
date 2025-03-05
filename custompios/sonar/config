@@ -19,8 +19,6 @@
 [[ -n "$SONAR_LOG_PATH" ]] || SONAR_LOG_PATH="/home/${BASE_USER}/printer_data/logs"
 # Add Sonar to moonraker.conf (update_manager) bool (1:yes / 0:no)
 [[ -n "$SONAR_ADD_SONAR_MOONRAKER" ]] || SONAR_ADD_SONAR_MOONRAKER="1"
-# Path to moonraker.conf (must be set if add to update_manager)
-[[ -n "$SONAR_MOONRAKER_CONF_PATH" ]] || SONAR_MOONRAKER_CONF_PATH="${SONAR_CONFIG_PATH}/moonraker.conf"
 
 ###########################################################################
 ### DO NOT EDIT BELOW THIS LINE, UNLESS YOU KNOW EXACTLY WHAT HAPPENDS! ###
