@@ -33,9 +33,9 @@ trap 'err_exit $? $LINENO' ERR
 # and kill running jobs
 function err_exit {
     if [ "${1}" != "0" ]; then
-        log_msg "ERROR: Error ${1} occured on line ${2}"
+        log_msg "ERROR: Error ${1} occurred on line ${2}"
         log_msg "ERROR: Stopping $(basename "$0")."
-        log_msg "Goodbye ..."
+        log_msg "Goodbye"
     fi
     exit 1
 }
@@ -43,13 +43,13 @@ function err_exit {
 # Print Goodbye Message
 # and kill running jobs
 function shutdown {
-    log_msg "Sonar service stopped or killed ..."
+    log_msg "INFO: Sonar service stopped or killed"
     if [ -n "$(jobs -pr)" ]; then
         jobs -pr | while IFS='' read -r job_id; do
             kill "${job_id}"
         done
     fi
-    log_msg "Goodbye ..."
+    log_msg "Goodbye"
     exit 0
 }
 
@@ -58,21 +58,21 @@ function run_service {
     local service
     service="$(get_param sonar enable)"
     if [[ "${service}" == "false" ]]; then
-        log_msg "Sonar.service disabled by configuration ..."
+        log_msg "Sonar.service disabled by configuration"
         if [[ "$(systemctl is-active sonar.service 2> /dev/null)" != "inactive" ]]; then
-            log_msg "INFO: Service will be halted until next reboot ..."
-            log_msg "INFO: GoodBye ..."
+            log_msg "INFO: Service will be stopped until next reboot"
+            log_msg "INFO: GoodBye"
             systemctl stop sonar.service
         else
-            log_msg "WARN: Sonar Service already inactive ..."
-            log_msg "INFO: Exiting! GoodBye ..."
+            log_msg "WARN: Sonar Service already inactive"
+            log_msg "INFO: Exiting! GoodBye"
             exit 0
         fi
     fi
 }
 
 # Dependency Check
-# call check_dep <programm>, ex.: check_dep vim
+# call check_dep <package>, ex.: check_dep vim
 function check_dep {
     local dep
     dep="$(whereis "${1}" | awk '{print $2}')"
@@ -86,7 +86,7 @@ function check_dep {
 
 # Initial Check
 function initial_check {
-    log_msg "INFO: Checking Dependencys"
+    log_msg "INFO: Checking Dependencies"
     check_dep "crudini"
     check_eth_con
     run_service
@@ -96,8 +96,8 @@ function initial_check {
 function check_eth_con {
     if [ -f "/sys/class/net/eth0/operstate" ] &&
     [ "$(cat /sys/class/net/eth0/operstate)" == "up" ]; then
-        log_msg "WARN: Connected via ethernet, please disable service ..."
-        log_msg "Stopping sonar.service till next reboot ..."
+        log_msg "WARN: Connected via ethernet, please disable service."
+        log_msg "Stopping sonar.service till next reboot!"
         systemctl stop sonar.service
     fi
 }
@@ -228,7 +228,7 @@ function keepalive {
             log_msg "Waiting 10 seconds to re-establish connection ..."
             sleep 10
             if [[ "${retry_count}" -eq 3 ]]; then
-                log_msg "WARN: Reconnect failed after ${retry_count} retries ..."
+                log_msg "WARN: Reconnect failed after ${retry_count} retries."
                 log_msg "Attempt paused for ${SONAR_CHECK_INTERVAL:-60} seconds."
                 sleep "${SONAR_CHECK_INTERVAL:-60}"
                 # reset retry_count
