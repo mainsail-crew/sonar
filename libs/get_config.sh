@@ -18,29 +18,32 @@ set -Ee
 ## Determine Configuration File and set defaults if not found.
 
 function get_config_path {
-    local dot_config_file new_path old_path path
-    dot_config_file="${BASE_SNR_PATH}/tools/.config"
-    new_path="${BASE_USER_HOME}/printer_data/config/sonar.conf"
-    old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
-    fallback="${BASE_SNR_PATH}/resources/sonar.conf"
-
+    # Check for path in .conf file first
+    local dot_config_file="${BASE_SNR_PATH}/tools/.config"
     if [[ -f "${dot_config_file}" ]]; then
         # shellcheck disable=SC1090
         source "${dot_config_file}"
         if [[ -f "${SONAR_CONFIG_PATH}" ]]; then
-            path="${SONAR_CONFIG_PATH}"
+            echo "${SONAR_CONFIG_PATH}"
+            return
         fi
     fi
-    if [[ -f "${new_path}" ]] && [[ ! -h "${new_path}" ]]; then
-        path="${new_path}"
+
+    # Check "new moonraker path"
+    local new_path="${BASE_USER_HOME}/printer_data/config/sonar.conf"
+    if [[ -f "${new_path}" ]]; then
+        echo "${new_path}"
+        return
     fi
-    if [[ -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
-        path="${old_path}"
+
+    # Check "old moonraker path"
+    local old_path="${BASE_USER_HOME}/klipper_config/sonar.conf"
+    if [[ -f "${old_path}" ]]; then
+        echo "${old_path}"
+        return
     fi
+
     # Fallback Handling
-    if [[ ! -f "${old_path}" ]] && [[ ! -f "${new_path}" ]]; then
-        path="${fallback}"
-        fallback_msg
-    fi
-    echo "${path}"
+    fallback_msg
+    echo "${BASE_SNR_PATH}/resources/sonar.conf"
 }
