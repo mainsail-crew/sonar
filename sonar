@@ -25,7 +25,7 @@ function init_local_vars {
     declare -r SNR_LOG_PATH
 }
 
-## Import Librarys
+## Import Libraries
 function import_libs {
     # shellcheck source-path=SCRIPTDIR/libs/
     source "${BASE_SNR_PATH}/libs/configparser.sh"
@@ -69,7 +69,7 @@ if [[ "$#" -ne 0 ]]; then
     while getopts ":dvh" arg; do
         case "${arg}" in
             d )
-                printf "\e[33mWARN: \e[0mRunnig sonar in Debug Mode ...\n"
+                printf "\e[33mWARN: \e[0mRunning sonar in Debug Mode ...\n"
                 SONAR_DEBUG="1"
                 set -x
             ;;
@@ -89,7 +89,7 @@ if [[ "$#" -ne 0 ]]; then
     done
 fi
 
-# Step 4: Make sure script runs with root priviledges
+# Step 4: Make sure script runs with root privileges
 if [[ "$(id -u)" != "0" ]] && [[ "${SONAR_DEBUG}" != "1" ]]; then
     do_run_as_root_msg
     exit 1
