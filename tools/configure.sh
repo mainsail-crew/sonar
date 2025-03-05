@@ -155,15 +155,12 @@ specify_config_path() {
     config_path_msg
     default_path_msg
     read -erp "Please enter path: " reply
-    if [[ -z "${reply}" ]]; then
-        echo -e "SONAR_CONFIG_PATH=\"${SR_CONFIG_CONFIGPATH}\"" >> \
-        "${SR_CONFIG_CONFIGFILE}"
-        return 0
-    fi
+
     if [[ -n "${reply}" ]]; then
-        echo -e "SONAR_CONFIG_PATH=\"${reply}\"" >> "${SR_CONFIG_CONFIGFILE}"
-        return 0
+        SR_CONFIG_CONFIGPATH=${reply}
     fi
+
+    echo -e "SONAR_CONFIG_PATH=\"${SR_CONFIG_CONFIGPATH}\"" >> "${SR_CONFIG_CONFIGFILE}"
 }
 
 specify_log_path() {
@@ -171,15 +168,12 @@ specify_log_path() {
     log_path_msg
     default_path_msg
     read -erp "Please enter path: " reply
-    if [[ -z "${reply}" ]]; then
-        echo -e "SONAR_LOG_PATH=\"${SR_CONFIG_LOGPATH}\"" >> \
-        "${SR_CONFIG_CONFIGFILE}"
-        return 0
-    fi
+
     if [[ -n "${reply}" ]]; then
-        echo -e "SONAR_LOG_PATH=\"${reply}\"" >> "${SR_CONFIG_CONFIGFILE}"
-        return 0
+        SR_CONFIG_LOGPATH=${reply}
     fi
+
+    echo -e "SONAR_LOG_PATH=\"${SR_CONFIG_LOGPATH}\"" >> "${SR_CONFIG_CONFIGFILE}"
 }
 
 add_moonraker_entry() {
