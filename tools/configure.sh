@@ -31,7 +31,6 @@ SR_CONFIG_ROOTPATH="/home/${SR_CONFIG_USER}/printer_data"
 SR_CONFIG_CONFIGPATH="${SR_CONFIG_ROOTPATH}/config"
 SR_CONFIG_LOGPATH="${SR_CONFIG_ROOTPATH}/logs"
 SR_CONFIG_ENVPATH="${SR_CONFIG_ROOTPATH}/systemd"
-SR_MOONRAKER_CONFIG_PATH="${SR_CONFIG_CONFIGPATH}/moonraker.conf"
 
 ### Messages
 header_msg() {
@@ -161,11 +160,6 @@ specify_config_path() {
         "${SR_CONFIG_CONFIGFILE}"
         return 0
     fi
-    if [[ -n "${reply}" ]]; then
-        echo -e "SONAR_CONFIG_PATH=\"${reply}\"" >> "${SR_CONFIG_CONFIGFILE}"
-        SR_MOONRAKER_CONFIG_PATH="${reply}/moonraker.conf"
-        return 0
-    fi
 }
 
 specify_log_path() {
@@ -192,8 +186,6 @@ add_moonraker_entry() {
         case "${reply}" in
             [yY]*)
                 echo -e "SONAR_ADD_SONAR_MOONRAKER=\"1\"" >> "${SR_CONFIG_CONFIGFILE}"
-                echo "SONAR_MOONRAKER_CONF_PATH=\"${SR_MOONRAKER_CONFIG_PATH}\"" \
-                >> "${SR_CONFIG_CONFIGFILE}"
                 break
             ;;
             [nN]*)
