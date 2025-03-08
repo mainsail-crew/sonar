@@ -17,8 +17,7 @@ Wants=udev.service network-online.target
 WantedBy=multi-user.target
 
 [Service]
-Type=exec
-RemainAfterExit=Yes
-ExecStart=/usr/local/bin/sonar
+Type=simple
+ExecStart=/usr/local/bin/sonar.py
 Restart=on-failure
 RestartSec=5
