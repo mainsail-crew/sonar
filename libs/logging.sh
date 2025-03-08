@@ -25,8 +25,11 @@ function init_log_entry {
     log_msg "INFO: Sonar - A WiFi Keepalive daemon"
     log_msg "INFO: Version: ${SNR_LOCAL_VERSION}"
     log_msg "INFO: Prepare Startup ..."
+
     # print config when debug_log is set
-    [[ "$(debug_log)" != "false" ]] && print_cfg
+    if [[ "$(debug_log)" != "false" ]]; then
+        print_cfg
+    fi
 }
 
 function print_cfg {
@@ -36,10 +39,12 @@ function print_cfg {
     while read -r line; do
         local strip
         # remove comments
-        strip=$(echo "${line}" | sed 's/^##.*//g;s/#[[:space:]].*//g')
+        strip=$(sed 's/^##.*//g;s/#[[:space:]].*//g' <<< "${line}")
 
         # only print non-empty lines
-        [[ -n "${strip}" ]] && log_msg "${prefix}${strip}"
+        if [[ -n "${strip}" ]]; then
+            log_msg "${prefix}${strip}"
+        fi
     done < "$(get_config_path)"
 }
 
@@ -48,10 +53,14 @@ function log_msg {
     echo -e "${msg}"
 
     # Stop here if no persistant log is set
-    [[ "${SNR_PERSISTANT_LOG}" != "true" ]] && return
+    if [[ "${SNR_PERSISTANT_LOG}" != "true" ]]; then
+        return
+    fi
 
     # make sure file exists
-    [[ ! -f "${SNR_LOG_PATH}" ]] && touch "${SNR_LOG_PATH}"
+    if [[ ! -f "${SNR_LOG_PATH}" ]]; then
+        touch "${SNR_LOG_PATH}"
+    fi
 
     # write to logfile with timestamp
     echo -e "$(date +'[%D %T]') ${msg}" | tr -s ' ' >> "${SNR_LOG_PATH}" 2>&1
