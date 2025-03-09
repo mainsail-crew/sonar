@@ -39,7 +39,8 @@ import logging
 class SonarDaemon:
     """Sonar - A WiFi Keepalive Daemon"""
 
-    def __init__(self):
+    def __init__(self, config_path=None):
+        self.config = None
         # Set up logging
         self.logger = logging.getLogger("sonar")
         self.logger.setLevel(logging.INFO)
@@ -55,26 +56,13 @@ class SonarDaemon:
         self.logger.addHandler(ch)
 
         # Load configuration
-        self.load_config()
+        self.load_config(config_path)
 
-    def load_config(self):
+    def load_config(self, config_path=None):
         config = configparser.ConfigParser(inline_comment_prefixes='#')
 
-        # Check new moonraker structure for config file
-        script_path = os.path.dirname(os.path.abspath(__file__))
-        home_path = os.path.dirname(script_path)
-
-        # define paths for new and old config files
-        new_path = os.path.join(home_path, "printer_data/config/sonar.conf")
-        old_path = os.path.join(home_path, "klipper_config/sonar.conf")
-        fallback_path = os.path.join(script_path, "resources/sonar.conf")
-
-        if os.path.exists(new_path):
-            config.read(new_path)
-        elif os.path.exists(old_path):
-            config.read(old_path)
-        elif os.path.exists(fallback_path):
-            config.read(fallback_path)
+        if config_path and os.path.exists(config_path):
+            config.read(config_path)
         else:
             self.logger.warning("No configuration file found. Using default values.")
             config.add_section("sonar")
@@ -270,7 +258,10 @@ class SonarDaemon:
 
 if __name__ == "__main__":
     try:
-        daemon = SonarDaemon()
+        start_arg_config = None
+        if len(sys.argv) > 1:
+            start_arg_config = sys.argv[1]
+        daemon = SonarDaemon(start_arg_config)
         daemon.run()
     except KeyboardInterrupt:
         print("\nSonar daemon interrupted by user. Exiting.")
