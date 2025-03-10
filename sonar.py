@@ -40,7 +40,7 @@ class SonarDaemon:
     """Sonar - A WiFi Keepalive Daemon"""
 
     def __init__(self, config_path=None):
-        self.config = None
+        self.config = {}
         # Set up logging
         self.logger = logging.getLogger("sonar")
         self.logger.setLevel(logging.INFO)
@@ -55,10 +55,37 @@ class SonarDaemon:
         ch.setFormatter(formatter)
         self.logger.addHandler(ch)
 
-        self.logger.info("Starting Sonar – WiFi Keepalive Daemon.")
-
         # Load configuration
         self.load_config(config_path)
+
+        # Set up persistant logging if enabled
+        if self.config['persistant_log']:
+            log_file = "/var/log/sonar.log"
+            try:
+                formatter = logging.Formatter('[%(asctime)s] %(message)s',
+                                              datefmt='%m/%d/%Y %H:%M:%S')
+                fh = logging.FileHandler(log_file)
+                fh.setFormatter(formatter)
+                self.logger.addHandler(fh)
+            except PermissionError:
+                self.logger.warning(f"No permission to write to {log_file}. "
+                                    f"Using stdout instead.")
+
+        self.logger.info("Starting Sonar – WiFi Keepalive Daemon.")
+
+        self.logger.info(f"Configuration loaded:")
+        self.logger.info(f"  enable: {self.config['enable']}")
+        self.logger.info(f"  debug_log: {self.config['debug_log']}")
+        self.logger.info(f"  persistant_log: {self.config['persistant_log']}")
+        self.logger.info(f"  target: {self.config['target']}")
+        self.logger.info(f"  count: {self.config['count']}")
+        self.logger.info(f"  interval: {self.config['interval']}")
+        self.logger.info(f"  restart_threshold: {self.config['restart_threshold']}")
+
+        # Set debug level if needed
+        if self.config['debug_log']:
+            self.logger.setLevel(logging.DEBUG)
+            self.logger.debug("Debug logging enabled.")
 
     def load_config(self, config_path=None):
         cp = configparser.ConfigParser(inline_comment_prefixes='#')
@@ -90,33 +117,6 @@ class SonarDaemon:
             'interval': cp.getint('sonar', 'interval'),
             'restart_threshold': cp.getint('sonar', 'restart_threshold')
         }
-
-        self.logger.info(f"Configuration loaded:")
-        self.logger.info(f"  enable: {self.config['enable']}")
-        self.logger.info(f"  debug_log: {self.config['debug_log']}")
-        self.logger.info(f"  persistant_log: {self.config['persistant_log']}")
-        self.logger.info(f"  target: {self.config['target']}")
-        self.logger.info(f"  count: {self.config['count']}")
-        self.logger.info(f"  interval: {self.config['interval']}")
-        self.logger.info(f"  restart_threshold: {self.config['restart_threshold']}")
-
-        # Set up persistant logging if enabled
-        if self.config['persistant_log']:
-            log_file = "/var/log/sonar.log"
-            try:
-                formatter = logging.Formatter('[%(asctime)s] %(message)s',
-                                              datefmt='%m/%d/%Y %H:%M:%S')
-                fh = logging.FileHandler(log_file)
-                fh.setFormatter(formatter)
-                self.logger.addHandler(fh)
-            except PermissionError:
-                self.logger.warning(f"No permission to write to {log_file}. "
-                                    f"Using stdout instead.")
-
-        # Set debug level if needed
-        if self.config['debug_log']:
-            self.logger.setLevel(logging.DEBUG)
-            self.logger.debug("Debug logging enabled.")
 
     def _is_service_active(self, service_name):
         try:
