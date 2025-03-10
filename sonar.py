@@ -101,6 +101,24 @@ class SonarDaemon:
             self.logger.info(f"  interval: {self.config['interval']}")
             self.logger.info(f"  restart_threshold: {self.config['restart_threshold']}")
 
+        # Set up persistant logging if enabled
+        if self.config['persistant_log']:
+            log_file = "/var/log/sonar.log"
+            try:
+                formatter = logging.Formatter('[%(asctime)s] %(message)s',
+                                              datefmt='%m/%d/%Y %H:%M:%S')
+                fh = logging.FileHandler(log_file)
+                fh.setFormatter(formatter)
+                self.logger.addHandler(fh)
+            except PermissionError:
+                self.logger.warning(f"No permission to write to {log_file}. "
+                                    f"Using stdout instead.")
+
+        # Set debug level if needed
+        if self.config['debug_log']:
+            self.logger.setLevel(logging.DEBUG)
+            self.logger.debug("Debug logging enabled.")
+
     def _is_service_active(self, service_name):
         try:
             result = subprocess.run(["systemctl", "is-active", service_name],
@@ -195,23 +213,6 @@ class SonarDaemon:
             return False
 
     def run(self):
-        # Set up persistant logging if enabled
-        if self.config['persistant_log']:
-            log_file = "/var/log/sonar.log"
-            try:
-                formatter = logging.Formatter('[%(asctime)s] %(message)s',
-                                              datefmt='%m/%d/%Y %H:%M:%S')
-                fh = logging.FileHandler(log_file)
-                fh.setFormatter(formatter)
-                self.logger.addHandler(fh)
-            except PermissionError:
-                self.logger.warning(f"No permission to write to {log_file}. "
-                                    f"Using stdout instead.")
-
-        # Set debug level if needed
-        if self.config['debug_log']:
-            self.logger.setLevel(logging.DEBUG)
-            self.logger.debug("Debug logging enabled.")
 
         if not self.config['enable']:
             self.logger.info("Sonar is disabled in the configuration. Exiting.")
