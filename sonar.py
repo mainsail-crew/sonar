@@ -12,13 +12,13 @@ Configuration:
   sonar.conf) in INI format. For example:
 
     [sonar]
-    enable = true
-    debug_log = false
-    persistant_log = false
-    target = auto
-    count = 3
-    interval = 60
-    restart_threshold = 10
+    enable: true
+    debug_log: false
+    persistant_log: false
+    target: auto
+    count: 3
+    interval: 60
+    restart_threshold: 10
 
   If "auto" is set for the target, the default gateway (router IP) is determined
   automatically.
