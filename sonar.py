@@ -55,6 +55,8 @@ class SonarDaemon:
         ch.setFormatter(formatter)
         self.logger.addHandler(ch)
 
+        self.logger.info("Starting Sonar – WiFi Keepalive Daemon.")
+
         # Load configuration
         self.load_config(config_path)
 
@@ -193,8 +195,6 @@ class SonarDaemon:
             return False
 
     def run(self):
-        self.logger.info("Starting Sonar – WiFi Keepalive Daemon.")
-
         # Set up persistant logging if enabled
         if self.config['persistant_log']:
             log_file = "/var/log/sonar.log"
