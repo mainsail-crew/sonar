@@ -166,12 +166,16 @@ install_sonar() {
 }
 
 install_service_file() {
-    local servicefile systemd_dir
+    local servicefile systemd_dir envfile
+    envfile="${PWD}/resources/sonar.env"
     servicefile="${PWD}/resources/sonar.service"
     systemd_dir="/etc/systemd/system"
     echo -en "Install sonar.service file ...\r"
     # Install Service file
     cp -f "${servicefile}" "${systemd_dir}"
+    # Install sonar.env file
+    echo -en "Install sonar.env file ...\r"
+    cp -f "${envfile}" "${SONAR_SYSTEMD_PATH}"
 }
 
 install_logrotate() {
@@ -268,6 +272,7 @@ main() {
     if [[ -n "${SONAR_DATA_PATH}" ]]; then
         SONAR_CONFIG_PATH="${SONAR_DATA_PATH}/config"
         SONAR_LOG_PATH="${SONAR_DATA_PATH}/logs"
+        SONAR_SYSTEMD_PATH="${SONAR_DATA_PATH}/systemd"
     fi
 
     ## Make sure folders exist
