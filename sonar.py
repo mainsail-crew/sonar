@@ -59,26 +59,34 @@ class SonarDaemon:
         self.load_config(config_path)
 
     def load_config(self, config_path=None):
-        config = configparser.ConfigParser(inline_comment_prefixes='#')
+        cp = configparser.ConfigParser(inline_comment_prefixes='#')
 
         if config_path and os.path.exists(config_path):
-            config.read(config_path)
+            cp.read(config_path)
         else:
             self.logger.warning("No configuration file found. Using default values.")
-            config.add_section("sonar")
 
-        if 'sonar' in config:
-            config = config['sonar']
+        cp['DEFAULT'] = {
+            'enable': 'false',
+            'debug_log': 'false',
+            'persistant_log': 'false',
+            'target': 'auto',
+            'count': '3',
+            'interval': '60',
+            'restart_threshold': '10'
+        }
+
+        if not cp.has_section('sonar'):
+            cp.add_section('sonar')
 
         self.config = {
-            'enable': config.getboolean('enable', fallback=False),
-            'debug_log': config.getboolean('debug_log', fallback=True),
-            'persistant_log': config.getboolean('persistant_log',
-                                                fallback=False),
-            'target': config.get('target', fallback="auto"),
-            'count': config.getint('count', fallback=3),
-            'interval': config.getint('interval', fallback=60),
-            'restart_threshold': config.getint('restart_threshold', fallback=10)
+            'enable': cp.getboolean('sonar', 'enable'),
+            'debug_log': cp.getboolean('sonar', 'debug_log'),
+            'persistant_log': cp.getboolean('sonar', 'persistant_log'),
+            'target': cp.get('sonar', 'target'),
+            'count': cp.getint('sonar', 'count'),
+            'interval': cp.getint('sonar', 'interval'),
+            'restart_threshold': cp.getint('sonar', 'restart_threshold')
         }
 
         if self.config['debug_log']:
