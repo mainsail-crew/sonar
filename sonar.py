@@ -91,15 +91,14 @@ class SonarDaemon:
             'restart_threshold': cp.getint('sonar', 'restart_threshold')
         }
 
-        if self.config['debug_log']:
-            self.logger.info(f"Configuration loaded:")
-            self.logger.info(f"  enable: {self.config['enable']}")
-            self.logger.info(f"  debug_log: {self.config['debug_log']}")
-            self.logger.info(f"  persistant_log: {self.config['persistant_log']}")
-            self.logger.info(f"  target: {self.config['target']}")
-            self.logger.info(f"  count: {self.config['count']}")
-            self.logger.info(f"  interval: {self.config['interval']}")
-            self.logger.info(f"  restart_threshold: {self.config['restart_threshold']}")
+        self.logger.info(f"Configuration loaded:")
+        self.logger.info(f"  enable: {self.config['enable']}")
+        self.logger.info(f"  debug_log: {self.config['debug_log']}")
+        self.logger.info(f"  persistant_log: {self.config['persistant_log']}")
+        self.logger.info(f"  target: {self.config['target']}")
+        self.logger.info(f"  count: {self.config['count']}")
+        self.logger.info(f"  interval: {self.config['interval']}")
+        self.logger.info(f"  restart_threshold: {self.config['restart_threshold']}")
 
         # Set up persistant logging if enabled
         if self.config['persistant_log']:
