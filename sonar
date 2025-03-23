@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo -e "This script is deprecated and will only start the upgrade script.\n"
+
+bash "${PWD}"/tools/upgrade-to-v2.sh
