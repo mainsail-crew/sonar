@@ -83,6 +83,9 @@ main() {
     echo -e "Removing old sonar binary"
     rm -f "/usr/local/bin/sonar"
 
+    echo -e "Restarting sonar.service"
+    systemctl restart sonar.service
+
     echo -e "Done!"
 }
 
