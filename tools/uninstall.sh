@@ -69,29 +69,29 @@ trap 'err_exit $? $LINENO' ERR
 ### Uninstall sonar
 ask_uninstall() {
     local remove
-    if [[ -d "${HOME}/sonar" ]] && [[ -x "/usr/local/bin/sonar" ]]; then
-        read -erp "Do you REALLY want to remove existing 'sonar'? [y/N]: " -i "N" remove
-        while true; do
-            case "${remove}" in
-                [yY]* )
-                    sudo echo -e "\nPlease enter your password!"
-                    break
-                ;;
-                [nN]* )
-                    echo -e "\nUninstall aborted by user! Exiting..."
-                    echo -e "GoodBye...\n"
-                    exit 1
-                ;;
-                *)
-                    echo -e "\nInvalid input, please try again."
-                ;;
-            esac
-        done
-    else
+    if [[ ! -d "${HOME}/sonar" ]] || [[ ! -x "/usr/local/bin/sonar" ]]; then
         echo -e "\n'Sonar' seems not installed."
         echo -e "Exiting. GoodBye ..."
         exit 1
     fi
+
+    read -erp "Do you REALLY want to remove existing 'sonar'? [y/N]: " -i "N" remove
+    while true; do
+        case "${remove}" in
+            [yY]* )
+                sudo echo -e "\nPlease enter your password!"
+                break
+            ;;
+            [nN]* )
+                echo -e "\nUninstall aborted by user! Exiting..."
+                echo -e "GoodBye...\n"
+                exit 1
+            ;;
+            *)
+                echo -e "\nInvalid input, please try again."
+            ;;
+        esac
+    done
 }
 
 uninstall_sonar() {
@@ -101,8 +101,21 @@ uninstall_sonar() {
     echo -en "\nStopping sonar.service ...\r"
     sudo systemctl stop sonar.service &> /dev/null
     echo -e "Stopping sonar.service ... \t[${SR_OK}]\r"
-    echo -en "Uninstalling sonar.service...\r"
+    echo -en "Uninstalling sonar.service, sonar.env and sonar.conf ...\r"
     if [[ -f "${servicefile}" ]]; then
+        local envfile
+        envfile=$(grep "EnvironmentFile=" "${servicefile}" | cut -d'=' -f2)
+
+        if [[ -n "${envfile}" ]]; then
+            local configfile
+            configfile=$(grep "SONAR_ARGS=" "${envfile}" | sed -E 's/.*SONAR_ARGS="[^"]+ ([^"]+)".*/\1/')
+            if [[ -f "${configfile}" ]]; then
+                sudo rm -f "${configfile}"
+            fi
+
+            sudo rm -f "${envfile}"
+        fi
+
         sudo rm -f "${servicefile}"
     fi
     if [[ -x "${bin_path}" ]]; then
