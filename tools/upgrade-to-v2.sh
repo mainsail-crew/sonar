@@ -71,11 +71,11 @@ main() {
     cp -f "${resources_service}" "/etc/systemd/system/sonar.service"
 
     echo -e "Updating user in sonar.env"
-    sed -i "s|/home/pi/sonar/|${sonar_path}|g" "${printer_data_path}/systemd/sonar.env"
-    sed -i "s|/home/pi/printer_data/|${printer_data_path}|g" "${printer_data_path}/systemd/sonar.env"
+    sed -i "s|/home/pi/sonar/|${sonar_path}/|g" "${printer_data_path}/systemd/sonar.env"
+    sed -i "s|/home/pi/printer_data/|${printer_data_path}/|g" "${printer_data_path}/systemd/sonar.env"
 
     echo -e "Updating user in sonar.service"
-    sed -i "s|User=pi|User=${USER}|g" "/etc/systemd/system/sonar.service"
+    sed -i "s|/home/pi/printer_data/|${printer_data_path}/|g" "/etc/systemd/system/sonar.service"
 
     echo -e "Reloading systemd"
     systemctl daemon-reload
