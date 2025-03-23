@@ -2,4 +2,5 @@
 
 echo -e "This script is deprecated and will only start the upgrade script.\n"
 
-bash "${PWD}"/tools/upgrade-to-v2.sh
+sonar_path=$(dirname "$(readlink /usr/local/bin/sonar)")
+bash "${sonar_path}"/tools/upgrade-to-v2.sh
