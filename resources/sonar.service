@@ -18,7 +18,7 @@ WantedBy=multi-user.target
 
 [Service]
 Type=simple
-EnvironmentFile=/home/pi/printer_data/systemd/sonar.env
+EnvironmentFile=%envpath%/sonar.env
 ExecStart=/usr/bin/python3 $SONAR_ARGS
 Restart=on-failure
 RestartSec=5

@@ -60,6 +60,7 @@ main() {
     config_file=$(find "${home_path}" -name "sonar.conf" -not -path "${sonar_path}/resources/*" -type f | head -n1)
     config_path=$(dirname "${config_file}")
     printer_data_path=$(dirname "${config_path}")
+    env_path="${printer_data_path}/systemd"
 
     echo -e "Printer Data Path is ${printer_data_path}"
 
@@ -67,15 +68,15 @@ main() {
     local resources_env="${sonar_path}/resources/sonar.env"
     local resources_service="${sonar_path}/resources/sonar.service"
 
-    cp -f "${resources_env}" "${printer_data_path}/systemd/sonar.env"
+    cp -f "${resources_env}" "${env_path}/sonar.env"
     cp -f "${resources_service}" "/etc/systemd/system/sonar.service"
 
     echo -e "Updating user in sonar.env"
-    sed -i "s|/home/pi/sonar/|${sonar_path}/|g" "${printer_data_path}/systemd/sonar.env"
-    sed -i "s|/home/pi/printer_data/|${printer_data_path}/|g" "${printer_data_path}/systemd/sonar.env"
+    sed -i "s|%sonarpath%|${sonar_path}|g" "${env_path}/sonar.env"
+    sed -i "s|%configpath%|${config_path}|g" "${env_path}/sonar.env"
 
     echo -e "Updating user in sonar.service"
-    sed -i "s|/home/pi/printer_data/|${printer_data_path}/|g" "/etc/systemd/system/sonar.service"
+    sed -i "s|%envpath%|${env_path}|g" "/etc/systemd/system/sonar.service"
 
     echo -e "Reloading systemd"
     systemctl daemon-reload

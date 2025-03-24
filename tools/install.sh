@@ -11,14 +11,13 @@
 # shellcheck enable=require-variable-braces
 # shellcheck disable=SC2317
 
-## disabeld SC2086 for some lines because there we want 'word splitting'
-
 # Exit on Errors
 set -Ee
 
 # Global Vars
 TITLE="Sonar - A WiFi Keepalive daemon"
 [[ -n "${BASE_USER}" ]] || BASE_USER="$(whoami)"
+[[ -n "${SONAR_PATH}" ]] || SONAR_PATH="$(pwd)"
 [[ -n "${SONAR_UNATTENDED}" ]] || SONAR_UNATTENDED="0"
 [[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="resources/sonar.conf"
 
@@ -122,33 +121,21 @@ create_filestructure() {
 
 install_packages() {
     ### sonar Dependencies
-    PKGLIST="git crudini iputils-ping"
+    local pkglist=(git crudini iputils-ping)
 
     echo -e "Running apt update first ..."
     ### Run apt update
     sudo apt-get -q --allow-releaseinfo-change update
 
     echo -e "Installing 'sonar' Dependencies ..."
-    # shellcheck disable=SC2086
-    # disable because we want 'wordsplitting'
-    sudo apt-get install -q -y --no-install-recommends ${PKGLIST}
+    # shellcheck disable=SC2068
+    sudo apt-get install -q -y --no-install-recommends ${pkglist[@]}
 
     echo -e "Installing 'sonar' Dependencies ... [${CN_OK}]"
 }
 
 install_sonar() {
-    local bin_path config sonar_bin
-    bin_path="/usr/local/bin"
-    config="${SONAR_CONFIG_PATH}/sonar.conf"
-    sonar_bin="/home/${BASE_USER}/sonar/sonar"
-    # Link sonar to $PATH
-    echo -en "Linking sonar ...\r"
-    # Remove if exist!
-    if [[ -f /usr/local/bin/sonar ]]; then
-        rm -f /usr/local/bin/sonar
-    fi
-    sudo ln -sf "${sonar_bin}" "${bin_path}" > /dev/null
-    echo -e "Linking sonar ... [${CN_OK}]\r"
+    local config="${SONAR_CONFIG_PATH}/sonar.conf"
     # Install base line config
     # Make sure not overwrite existing!
     if [[ -f "${config}" ]]; then
@@ -167,15 +154,17 @@ install_sonar() {
 
 install_service_file() {
     local servicefile systemd_dir envfile
-    envfile="${PWD}/resources/sonar.env"
-    servicefile="${PWD}/resources/sonar.service"
+    envfile="${SONAR_PATH}/resources/sonar.env"
+    servicefile="${SONAR_PATH}/resources/sonar.service"
     systemd_dir="/etc/systemd/system"
     echo -en "Install sonar.service file ...\r"
     # Install Service file
     cp -f "${servicefile}" "${systemd_dir}"
+    sed -i "s|%envpath%|${SONAR_SYSTEMD_PATH}|g" "${systemd_dir}/sonar.service"
     # Install sonar.env file
     echo -en "Install sonar.env file ...\r"
     cp -f "${envfile}" "${SONAR_SYSTEMD_PATH}"
+    sed -i "s|%sonarpath%|${SONAR_PATH}|g" "${SONAR_SYSTEMD_PATH}/sonar.env"
 }
 
 install_logrotate() {
@@ -193,7 +182,7 @@ install_logrotate() {
 add_update_entry() {
     local moonraker_conf
     moonraker_conf="${SONAR_CONFIG_PATH}/moonraker.conf"
-    moonraker_update="${PWD}/resources/moonraker_update.txt"
+    moonraker_update="${SONAR_PATH}/resources/moonraker_update.txt"
     echo -en "Adding Sonar Update Manager entry to moonraker.conf ...\r"
     if [[ -f "${moonraker_conf}" ]]; then
         if [[ "$(grep -c "sonar" "${moonraker_conf}")" != "0" ]]; then
@@ -274,6 +263,11 @@ main() {
         SONAR_LOG_PATH="${SONAR_DATA_PATH}/logs"
         SONAR_SYSTEMD_PATH="${SONAR_DATA_PATH}/systemd"
     fi
+
+    ## Get path of sonar
+    local script_path
+    script_path="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+    SONAR_PATH="$(dirname "${script_path}")"
 
     ## Make sure folders exist
     create_filestructure
