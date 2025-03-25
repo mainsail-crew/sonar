@@ -165,6 +165,7 @@ install_service_file() {
     echo -en "Install sonar.env file ...\r"
     cp -f "${envfile}" "${SONAR_SYSTEMD_PATH}"
     sed -i "s|%sonarpath%|${SONAR_PATH}|g" "${SONAR_SYSTEMD_PATH}/sonar.env"
+    sed -i "s|%configpath%|${SONAR_CONFIG_PATH}|g" "${SONAR_SYSTEMD_PATH}/sonar.env"
 }
 
 install_logrotate() {
