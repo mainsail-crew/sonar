@@ -17,7 +17,7 @@ Wants=udev.service network-online.target
 WantedBy=multi-user.target
 
 [Service]
-Type=simple
+Type=exec
 EnvironmentFile=%envpath%/sonar.env
 ExecStart=/usr/bin/python3 $SONAR_ARGS
 Restart=on-failure
