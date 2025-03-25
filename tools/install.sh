@@ -17,7 +17,6 @@ set -Ee
 # Global Vars
 TITLE="Sonar - A WiFi Keepalive daemon"
 [[ -n "${BASE_USER}" ]] || BASE_USER="$(whoami)"
-[[ -n "${SONAR_PATH}" ]] || SONAR_PATH="$(pwd)"
 [[ -n "${SONAR_UNATTENDED}" ]] || SONAR_UNATTENDED="0"
 [[ -n "${SONAR_DEFAULT_CONF}" ]] || SONAR_DEFAULT_CONF="resources/sonar.conf"
 
