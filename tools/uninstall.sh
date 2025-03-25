@@ -106,7 +106,7 @@ uninstall_sonar() {
         local envfile
         envfile=$(grep "EnvironmentFile=" "${servicefile}" | cut -d'=' -f2)
 
-        if [[ -n "${envfile}" ]]; then
+        if [[ -f "${envfile}" ]]; then
             local configfile
             configfile=$(grep "SONAR_ARGS=" "${envfile}" | sed -E 's/.*SONAR_ARGS="[^"]+ ([^"]+)".*/\1/')
             if [[ -f "${configfile}" ]]; then
