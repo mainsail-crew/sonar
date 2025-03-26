@@ -84,7 +84,7 @@ cleanup() {
 
 err_exit() {
     if [[ "${1}" != "0" ]]; then
-        echo -e "ERROR: Error ${1} occured on line ${2}"
+        echo -e "ERROR: Error ${1} occurred on line ${2}"
         echo -e "ERROR: Stopping $(basename "$0")."
         echo -e "Goodbye..."
     fi
