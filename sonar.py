@@ -91,7 +91,10 @@ class SonarDaemon:
         cp = configparser.ConfigParser(inline_comment_prefixes='#')
 
         if config_path and os.path.exists(config_path):
-            cp.read(config_path)
+            try :
+                cp.read(config_path)
+            except Exception as e:
+                self.logger.warning(f"Error reading configuration file: {e}")
         else:
             self.logger.warning("No configuration file found. Using default values.")
 
