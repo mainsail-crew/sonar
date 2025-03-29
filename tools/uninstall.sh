@@ -73,7 +73,8 @@ ask_uninstall() {
     while true; do
         case "${remove}" in
             [yY]* )
-                sudo echo -e "\nPlease enter your password!"
+                echo -e "Please enter your password!\r"
+                sudo echo -en "Password accepted!"
                 break
             ;;
             [nN]* )
@@ -89,12 +90,13 @@ ask_uninstall() {
 }
 
 uninstall_sonar() {
-    local servicefile bin_path
-    servicefile="/etc/systemd/system/sonar.service"
-    bin_path="/usr/local/bin/sonar"
+    local servicefile="/etc/systemd/system/sonar.service"
+    local bin_path="/usr/local/bin/sonar"
+
     echo -en "\nStopping sonar.service ...\r"
     sudo systemctl stop sonar.service &> /dev/null
     echo -e "Stopping sonar.service ... \t[${SR_OK}]\r"
+
     echo -en "Uninstalling sonar.service, sonar.env and sonar.conf ...\r"
     if [[ -f "${servicefile}" ]]; then
         local envfile
