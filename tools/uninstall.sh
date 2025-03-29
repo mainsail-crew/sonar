@@ -29,7 +29,7 @@ welcome_msg() {
 }
 
 goodbye_msg() {
-    echo -e "Please remove manually the 'sonar' folder in ${HOME}"
+    echo -e "\nPlease remove manually the 'sonar' folder in ${HOME}"
     echo -e "After that is done, please reboot!\nGoodBye...\n"
 }
 
