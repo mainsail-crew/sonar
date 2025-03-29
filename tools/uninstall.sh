@@ -73,7 +73,6 @@ ask_uninstall() {
     while true; do
         case "${remove}" in
             [yY]* )
-                echo -en "Please enter your password!\r"
                 sudo echo -e "Password accepted!"
                 break
             ;;
@@ -142,9 +141,15 @@ uninstall_sonar() {
 }
 
 remove_logrotate() {
+    local sonar_logrotate="/etc/logrotate.d/sonar"
+
     echo -en "Removing Logrotate Rule ...\r"
-    sudo rm -f /etc/logrotate.d/sonar
-    echo -e "Removing Logrotate Rule ... [${SR_OK}]"
+    if [[ -f "${sonar_logrotate}" ]]; then
+        sudo rm -f "${sonar_logrotate}"
+        echo -e "Removing Logrotate Rule ... [${SR_OK}]"
+    else
+        echo -e "Removing Logrotate Rule ... [${SR_SK}]"
+    fi
 }
 
 remove_log_ln() {
