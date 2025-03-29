@@ -69,12 +69,6 @@ trap 'err_exit $? $LINENO' ERR
 ### Uninstall sonar
 ask_uninstall() {
     local remove
-    if [[ ! -d "${HOME}/sonar" ]]; then
-        echo -e "\n'Sonar' seems not installed."
-        echo -e "Exiting. GoodBye ..."
-        exit 1
-    fi
-
     read -erp "Do you REALLY want to remove existing 'sonar'? [y/N]: " -i "N" remove
     while true; do
         case "${remove}" in
