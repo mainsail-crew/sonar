@@ -244,8 +244,8 @@ class SonarDaemon:
                 used_retries = 0
                 # Repeat until a single ping is successful
                 while not self.ping_target(target, 1):
-                    used_retries += 1
                     retry_count += 1
+                    used_retries += 1
                     self.restart_wifi(gateway['interface'])
                     self.logger.info("Waiting 10 seconds to re-establish the connection...")
                     time.sleep(10)
