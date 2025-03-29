@@ -16,7 +16,7 @@ TITLE="Sonar - A WiFi Keepalive daemon"
 
 # Message Vars
 SR_OK="\e[32mOK\e[0m"
-# SR_SK="\e[33mSKIPPED\e[0m" # kept for later use
+SR_SK="\e[33mSKIPPED\e[0m"
 
 ### Global functions
 
@@ -73,8 +73,8 @@ ask_uninstall() {
     while true; do
         case "${remove}" in
             [yY]* )
-                echo -e "Please enter your password!\r"
-                sudo echo -en "Password accepted!"
+                echo -en "Please enter your password!\r"
+                sudo echo -e "Password accepted!"
                 break
             ;;
             [nN]* )
@@ -93,12 +93,13 @@ uninstall_sonar() {
     local servicefile="/etc/systemd/system/sonar.service"
     local bin_path="/usr/local/bin/sonar"
 
-    echo -en "\nStopping sonar.service ...\r"
-    sudo systemctl stop sonar.service &> /dev/null
-    echo -e "Stopping sonar.service ... \t[${SR_OK}]\r"
+        echo -e "Start uninstalling Sonar"
 
-    echo -en "Uninstalling sonar.service, sonar.env and sonar.conf ...\r"
     if [[ -f "${servicefile}" ]]; then
+        echo -en "Stopping sonar.service ...\r"
+        sudo systemctl stop sonar.service &> /dev/null
+        echo -e "Stopping sonar.service ... \t[${SR_OK}]\r"
+
         local envfile
         envfile=$(grep "EnvironmentFile=" "${servicefile}" | cut -d'=' -f2)
 
@@ -106,18 +107,33 @@ uninstall_sonar() {
             local configfile
             configfile=$(grep "SONAR_ARGS=" "${envfile}" | sed -E 's/.*SONAR_ARGS="[^"]+ ([^"]+)".*/\1/')
             if [[ -f "${configfile}" ]]; then
+                echo -en "Removing sonar.conf ...\r"
                 sudo rm -f "${configfile}"
+                echo -e "Removing sonar.conf ... [${SR_OK}]\r"
             fi
 
+            echo -en "Removing sonar.env ...\r"
             sudo rm -f "${envfile}"
+            echo -e "Removing sonar.env ... [${SR_OK}]\r"
         fi
 
+        echo -en "Uninstalling sonar.service ...\r"
         sudo rm -f "${servicefile}"
+        echo -e "Uninstalling sonar.service...[${SR_OK}]\r"
+    else
+        echo -e "Sonar service file not found"
+        echo -e "Skipping remove sonar.service ... [${SR_SK}]"
+        echo -e "Skipping remove sonar.env ... [${SR_SK}]"
+        echo -e "Skipping remove sonar.conf ... [${SR_SK}]"
     fi
-    if [[ -x "${bin_path}" ]]; then
+
+    echo -en "Removing legacy sonar binary ...\r"
+    if [[ -f "${bin_path}" ]]; then
         sudo rm -f "${bin_path}"
+        echo -e "Removing legacy sonar binary ... [${SR_OK}]\r"
+    else
+        echo -e "Legacy sonar binary not found ... [${SR_SK}]"
     fi
-    echo -e "Uninstalling sonar.service...[${SR_OK}]\r"
 }
 
 remove_logrotate() {
