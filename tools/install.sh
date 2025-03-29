@@ -156,27 +156,31 @@ install_service_file() {
     envfile="${SONAR_PATH}/resources/sonar.env"
     servicefile="${SONAR_PATH}/resources/sonar.service"
     systemd_dir="/etc/systemd/system"
+
     echo -en "Install sonar.service file ...\r"
-    # Install Service file
     cp -f "${servicefile}" "${systemd_dir}"
     sed -i "s|%envpath%|${SONAR_SYSTEMD_PATH}|g" "${systemd_dir}/sonar.service"
-    # Install sonar.env file
+    echo -e "Install sonar.service file ... [${CN_OK}]"
+
     echo -en "Install sonar.env file ...\r"
     cp -f "${envfile}" "${SONAR_SYSTEMD_PATH}"
     sed -i "s|%sonarpath%|${SONAR_PATH}|g" "${SONAR_SYSTEMD_PATH}/sonar.env"
     sed -i "s|%configpath%|${SONAR_CONFIG_PATH}|g" "${SONAR_SYSTEMD_PATH}/sonar.env"
+    echo -e "Install sonar.env file ... [${CN_OK}]"
 }
 
 install_logrotate() {
     local logrotatefile logpath
     logrotatefile="resources/logrotate_sonar"
     logpath="${SONAR_LOG_PATH}/sonar.log"
-    # generate pseudo link
+
+    echo -en "Generating Log Symlink ...\r"
     ln -sf /var/log/sonar.log "${logpath}"
-    # install logrotate
+    echo -e "Generating Log Symlink ... [${CN_OK}]\r"
+
     echo -en "Install logrotate file ...\r"
     cp -rf "${logrotatefile}" /etc/logrotate.d/sonar
-    echo -e "Install logrotate file ... [${CN_OK}]\r"
+    echo -e "Install logrotate file ... [${CN_OK}]"
 }
 
 add_update_entry() {
@@ -203,6 +207,7 @@ add_update_entry() {
         fi
         echo -e "Adding Sonar Update Manager entry to moonraker.conf ... [${CN_OK}]"
     else
+        echo -e "Adding Sonar Update Manager entry to moonraker.conf ... [${CN_SK}]"
         echo -e "moonraker.conf is missing ... [${CN_SK}]"
     fi
 }
@@ -211,7 +216,7 @@ add_update_entry() {
 enable_service() {
     echo -en "Enable sonar.service on boot ...\r"
     sudo systemctl enable sonar.service &> /dev/null
-    echo -e "Enable sonar.service on boot ... [${CN_OK}]\r"
+    echo -e "Enable sonar.service on boot ... [${CN_OK}]"
 }
 
 ## start systemd service
