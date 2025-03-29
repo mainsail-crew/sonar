@@ -5,6 +5,10 @@
 ## Credits to guysoft!
 ## https://github.com/guysoft/CustomPiOS
 
+# Message Vars
+SR_OK="\e[32mOK\e[0m"
+SR_SK="\e[33mSKIPPED\e[0m"
+
 install_cleanup_trap() {
     # kills all child processes of the current process on SIGINT or SIGTERM
     trap 'cleanup' SIGINT SIGTERM
@@ -64,28 +68,34 @@ main() {
 
     echo -e "Printer Data Path is ${printer_data_path}"
 
-    echo -e "Copying new files ..."
+    echo -en "Copying new files ...\r"
     local resources_env="${sonar_path}/resources/sonar.env"
     local resources_service="${sonar_path}/resources/sonar.service"
 
     cp -f "${resources_env}" "${env_path}/sonar.env"
     cp -f "${resources_service}" "/etc/systemd/system/sonar.service"
+    echo -e "Copying new files ... [${SR_OK}]"
 
-    echo -e "Updating user in sonar.env"
+    echo -en "Updating user in sonar.env ...\r"
     sed -i "s|%sonarpath%|${sonar_path}|g" "${env_path}/sonar.env"
     sed -i "s|%configpath%|${config_path}|g" "${env_path}/sonar.env"
+    echo -e "Updating user in sonar.env ... [${SR_OK}]"
 
-    echo -e "Updating user in sonar.service"
+    echo -en "Updating user in sonar.service ...\r"
     sed -i "s|%envpath%|${env_path}|g" "/etc/systemd/system/sonar.service"
+    echo -e "Updating user in sonar.service ... [${SR_OK}]"
 
-    echo -e "Reloading systemd"
+    echo -en "Reloading systemd ...\r"
     systemctl daemon-reload
+    echo -e "Reloading systemd ... [${SR_OK}]"
 
-    echo -e "Removing old sonar binary"
+    echo -en "Removing old sonar binary ...\r"
     rm -f "/usr/local/bin/sonar"
+    echo -e "Removing old sonar binary ... [${SR_OK}]"
 
-    echo -e "Restarting sonar.service"
+    echo -en "Restarting sonar.service ...\r"
     systemctl restart sonar.service
+    echo -e "Restarting sonar.service ... [${SR_OK}]"
 
     echo -e "Done!"
 }
