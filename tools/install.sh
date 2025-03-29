@@ -148,7 +148,6 @@ install_sonar() {
         cp -f "${SONAR_DEFAULT_CONF}" "${config}" &> /dev/null
         echo -e "Copying sonar.conf ... [${CN_OK}]\r"
     fi
-    return 0
 }
 
 install_service_file() {
@@ -286,13 +285,9 @@ main() {
     ## Step 4: Install service File
     install_service_file
 
-    ## Step 5: Enable service
-    if [[ -f /etc/systemd/system/sonar.service ]] &&
-    [[ "${SONAR_UNATTENDED}" = "0" ]]; then
-        enable_service
-    fi
-    ## If unattended skip start service
+    ## Step 5: Enable & start service
     if [[ "${SONAR_UNATTENDED}" = "0" ]]; then
+        enable_service
         start_service
     fi
 
@@ -304,9 +299,10 @@ main() {
         add_update_entry
     fi
 
+    goodbye_msg
+
     ## Step 8: Ask for reboot
     ## Skip if UNATTENDED
-    goodbye_msg
     if [[ "${SONAR_UNATTENDED}" = "0" ]]; then
         ask_reboot
     fi
