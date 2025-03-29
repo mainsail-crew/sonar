@@ -14,7 +14,7 @@ Configuration:
     [sonar]
     enable: true
     debug_log: false
-    persistant_log: false
+    persistent_log: false
     target: auto
     count: 3
     interval: 60
@@ -23,7 +23,7 @@ Configuration:
   If "auto" is set for the target, the default gateway (router IP) is determined
   automatically.
 
-Note: If persistant_log is enabled, logs will be written to /var/log/sonar.log.
+Note: If persistent_log is enabled, logs will be written to /var/log/sonar.log.
 """
 
 import subprocess
@@ -59,7 +59,7 @@ class SonarDaemon:
         self.load_config(config_path)
 
         # Set up persistant logging if enabled
-        if self.config['persistant_log']:
+        if self.config['persistent_log']:
             log_file = "/var/log/sonar.log"
             try:
                 formatter = logging.Formatter('[%(asctime)s] %(message)s',
@@ -76,7 +76,7 @@ class SonarDaemon:
         self.logger.info(f"Configuration loaded:")
         self.logger.info(f"  enable: {self.config['enable']}")
         self.logger.info(f"  debug_log: {self.config['debug_log']}")
-        self.logger.info(f"  persistant_log: {self.config['persistant_log']}")
+        self.logger.info(f"  persistent_log: {self.config['persistent_log']}")
         self.logger.info(f"  target: {self.config['target']}")
         self.logger.info(f"  count: {self.config['count']}")
         self.logger.info(f"  interval: {self.config['interval']}")
@@ -101,7 +101,7 @@ class SonarDaemon:
         cp['DEFAULT'] = {
             'enable': 'false',
             'debug_log': 'false',
-            'persistant_log': 'false',
+            'persistent_log': 'false',
             'target': 'auto',
             'count': '3',
             'interval': '60',
@@ -114,7 +114,7 @@ class SonarDaemon:
         self.config = {
             'enable': cp.getboolean('sonar', 'enable'),
             'debug_log': cp.getboolean('sonar', 'debug_log'),
-            'persistant_log': cp.getboolean('sonar', 'persistant_log'),
+            'persistent_log': cp.getboolean('sonar', 'persistent_log'),
             'target': cp.get('sonar', 'target'),
             'count': cp.getint('sonar', 'count'),
             'interval': cp.getint('sonar', 'interval'),

@@ -70,6 +70,7 @@ main() {
 
     echo -en "Update sonar.conf ...\r"
     sed -i "s|restart_treshold|restart_threshold|g" "${config_file}"
+    sed -i "s|persistant_log|persistent_log|g" "${config_file}"
     echo -e "Update sonar.conf ... [${SR_OK}]"
 
     echo -en "Copying new files ...\r"

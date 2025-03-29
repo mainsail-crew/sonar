@@ -57,7 +57,7 @@ If set to "true" service will log every attempt to reach his target.
 **_NOTE: That will highly increase log size, this is intended for debugging
 purposes only._**
 
-    persistant_log: false
+    persistent_log: false
 
 This option allows you to store a persistent log file "/var/log/sonar.log".
 Otherwise, it will be only readable by `journalctl -u sonar` and it's _not_
