@@ -80,8 +80,8 @@ Sets interval in seconds, how long it should wait for next connection check.
 
     restart_threshold: 10
 
-The last option is a delay in seconds, between shutdown WiFi Interface and bring
-it up again.
+Delay in seconds before attempting to restart the WiFi connection after a
+connection loss.
 
 ---
 
