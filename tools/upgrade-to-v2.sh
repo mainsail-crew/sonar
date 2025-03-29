@@ -68,6 +68,10 @@ main() {
 
     echo -e "Printer Data Path is ${printer_data_path}"
 
+    echo -en "Update sonar.conf ...\r"
+    sed -i "s|restart_treshold|restart_threshold|g" "${config_file}"
+    echo -e "Update sonar.conf ... [${SR_OK}]"
+
     echo -en "Copying new files ...\r"
     local resources_env="${sonar_path}/resources/sonar.env"
     local resources_service="${sonar_path}/resources/sonar.service"
