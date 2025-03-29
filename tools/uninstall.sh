@@ -134,9 +134,9 @@ uninstall_sonar() {
     echo -en "Removing legacy sonar binary ...\r"
     if [[ -f "${bin_path}" ]]; then
         sudo rm -f "${bin_path}"
-        echo -e "Removing legacy sonar binary ... [${SR_OK}]\r"
+        echo -e "Removing legacy sonar binary ... [${SR_OK}]"
     else
-        echo -e "\nLegacy sonar binary not found ... [${SR_SK}]"
+        echo -e "Removing legacy sonar binary ... [${SR_SK}]"
     fi
 }
 
@@ -153,13 +153,22 @@ remove_logrotate() {
 }
 
 remove_log_ln() {
+    echo -en "Removing Log Symlink ...\r"
     local get_path
     get_path="$(find "${HOME}" -name "sonar.log" -type l)"
     if [[ -n "${get_path}" ]]; then
         sudo rm -f "${get_path}"
+        echo -e "Removing Log Symlink ... [${SR_OK}]"
+    else
+        echo -e "Removing Log Symlink ... [${SR_SK}]"
     fi
+
+    echo -en "Removing Log File ...\r"
     if [[ -f "/var/log/sonar.log" ]]; then
         sudo rm -f "/var/log/sonar.log"
+        echo -e "Removing Log File ... [${SR_OK}]"
+    else
+        echo -e "Removing Log File ... [${SR_SK}]"
     fi
 }
 
