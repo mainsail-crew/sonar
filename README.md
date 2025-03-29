@@ -33,7 +33,7 @@ to your moonraker.conf
 
 ## Configuration
 
-You are able to configure its behavior due a file in
+You can configure its behavior using a file in
 "~/printer_data/config/sonar.conf". But you don't have to. Defaults are
 hardcoded and Sonar will run without any configuration.
 
@@ -53,7 +53,7 @@ service. It will restart on reboot but exiting as long you don't change it to
 
     debug_log: false
 
-If set to "true" service will log every attempt to reach his target.
+If set to "true" service will log every attempt to reach its target.
 **_NOTE: That will highly increase log size, this is intended for debugging
 purposes only._**
 
@@ -72,7 +72,7 @@ default gateway (router).
 
     count: 3
 
-How often should be pinged.
+Number of ping attempts.
 
     interval: 60
 
