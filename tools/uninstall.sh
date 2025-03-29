@@ -126,9 +126,9 @@ uninstall_sonar() {
         echo -e "Uninstalling sonar.service...[${SR_OK}]\r"
     else
         echo -e "Sonar service file not found"
-        echo -e "Remove sonar.service ... [${SR_SK}]"
-        echo -e "Remove sonar.env ... [${SR_SK}]"
-        echo -e "Remove sonar.conf ... [${SR_SK}]"
+        echo -e "Removing sonar.service ... [${SR_SK}]"
+        echo -e "Removing sonar.env ... [${SR_SK}]"
+        echo -e "Removing sonar.conf ... [${SR_SK}]"
     fi
 
     echo -en "Removing legacy sonar binary ...\r"
