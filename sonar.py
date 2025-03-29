@@ -199,13 +199,10 @@ class SonarDaemon:
             if result.returncode != 0:
                 return False
 
-            # Stop here and return if debug_log is not enabled
-            if not self.config['debug_log']:
-                return True
-
-            lines = result.stdout.splitlines()
-            summary = lines[-1]
-            self.logger.debug(f"Ping to {target} successful: {summary}")
+            if self.config['debug_log']:
+                lines = result.stdout.splitlines()
+                summary = lines[-1]
+                self.logger.debug(f"Ping to {target} successful: {summary}")
 
             return True
         except Exception as e:
