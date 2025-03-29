@@ -210,7 +210,6 @@ class SonarDaemon:
             return False
 
     def run(self):
-
         if not self.config['enable']:
             self.logger.info("Sonar is disabled in the configuration. Exiting.")
             sys.exit(0)
