@@ -178,7 +178,6 @@ class SonarDaemon:
                 subprocess.run(["systemctl", "restart", "dhcpcd"],
                                check=True)
                 self.logger.info("dhcpcd service restarted.")
-                return
             except subprocess.CalledProcessError:
                 self.logger.warning("wpa_cli reassociate failed or failed to"
                                     " restart dhcpcd.")
@@ -187,7 +186,6 @@ class SonarDaemon:
                 subprocess.run(["systemctl", "restart",
                                 "NetworkManager.service"], check=True)
                 self.logger.info("NetworkManager service restarted.")
-                return
             except subprocess.CalledProcessError:
                 self.logger.warning("Restarting NetworkManager failed.")
         else:
