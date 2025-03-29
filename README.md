@@ -17,7 +17,7 @@ Image).
     cd ~/sonar
     make uninstall
 
-## Updating via moonraker's update manager
+## Updating via moonraker update manager
 
 Simply add
 
