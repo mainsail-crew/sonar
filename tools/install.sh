@@ -120,7 +120,7 @@ create_filestructure() {
 
 install_packages() {
     ### sonar Dependencies
-    local pkglist=(git crudini iputils-ping)
+    local pkglist=(iputils-ping)
 
     echo -e "Running apt update first ..."
     ### Run apt update
