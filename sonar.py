@@ -175,7 +175,7 @@ class SonarDaemon:
                 subprocess.run(["wpa_cli", "-i", interface, "reassociate"],
                                check=True)
                 self.logger.info("WiFi reconnected using wpa_cli reassociate.")
-                subprocess.run(["systemctl", "restart", "dhcpcd"],
+                subprocess.run(["systemctl", "restart", "dhcpcd.service"],
                                check=True)
                 self.logger.info("dhcpcd service restarted.")
             except subprocess.CalledProcessError:
