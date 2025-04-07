@@ -28,9 +28,6 @@ fi
 SR_CONFIG_USER=$(whoami)
 SR_CONFIG_CONFIGFILE="tools/.config"
 SR_CONFIG_ROOTPATH="/home/${SR_CONFIG_USER}/printer_data"
-SR_CONFIG_CONFIGPATH="${SR_CONFIG_ROOTPATH}/config"
-SR_CONFIG_LOGPATH="${SR_CONFIG_ROOTPATH}/logs"
-SR_CONFIG_ENVPATH="${SR_CONFIG_ROOTPATH}/systemd"
 
 ### Messages
 header_msg() {
@@ -61,27 +58,11 @@ default_path_msg() {
     echo -e "Hit ENTER to use default."
 }
 
-config_path_msg() {
+data_path_msg() {
     header_msg
-    echo -e "Please specify path to config file (sonar.conf)\n"
-    echo -e "\t\e[34mNOTE:\e[0m File names are hardcoded! Also skip trailing backslash!"
-    echo -e "\tDefault: \e[32m${SR_CONFIG_CONFIGPATH}\e[0m\n"
-}
-
-log_path_msg() {
-    header_msg
-    echo -e "Please specify path to log file (sonar.log)\n"
-    echo -e "\t\e[34mNOTE:\e[0m File names are hardcoded! Also skip trailing backslash!"
-    echo -e "\tThe log will only appear if persistant_log is set to 'true'"
-    echo -e "\tOtherwise use journalctl to view log."
-    echo -e "\tDefault: \e[32m${SR_CONFIG_LOGPATH}\e[0m\n"
-}
-
-env_path_msg() {
-    header_msg
-    echo -e "Please specify path to service environment file (sonar.env)\n"
-    echo -e "\t\e[34mNOTE:\e[0m File names are hardcoded! Also skip trailing backslash!"
-    echo -e "\tDefault: \e[32m${SR_CONFIG_ENVPATH}\e[0m\n"
+    echo -e "Please specify path for printer_data directory\n"
+    echo -e "\t\e[34mNOTE:\e[0m Skip trailing backslash!"
+    echo -e "\tDefault: \e[32m${SR_CONFIG_ROOTPATH}\e[0m\n"
 }
 
 add_moonraker_entry_msg() {
@@ -150,30 +131,17 @@ create_config_header() {
     echo -e "BASE_USER=\"${SR_CONFIG_USER}\"" >> "${SR_CONFIG_CONFIGFILE}"
 }
 
-specify_config_path() {
+specify_data_path() {
     local reply
-    config_path_msg
+    data_path_msg
     default_path_msg
     read -erp "Please enter path: " reply
 
     if [[ -n "${reply}" ]]; then
-        SR_CONFIG_CONFIGPATH=${reply}
+        SR_CONFIG_ROOTPATH=${reply}
     fi
 
-    echo -e "SONAR_CONFIG_PATH=\"${SR_CONFIG_CONFIGPATH}\"" >> "${SR_CONFIG_CONFIGFILE}"
-}
-
-specify_log_path() {
-    local reply
-    log_path_msg
-    default_path_msg
-    read -erp "Please enter path: " reply
-
-    if [[ -n "${reply}" ]]; then
-        SR_CONFIG_LOGPATH=${reply}
-    fi
-
-    echo -e "SONAR_LOG_PATH=\"${SR_CONFIG_LOGPATH}\"" >> "${SR_CONFIG_CONFIGFILE}"
+    echo -e "SONAR_DATA_PATH=\"${SR_CONFIG_ROOTPATH}\"" >> "${SR_CONFIG_CONFIGFILE}"
 }
 
 add_moonraker_entry() {
@@ -199,20 +167,14 @@ add_moonraker_entry() {
 
 ### Main func
 main() {
-    # Step 1: Welcome Message
     welcome_msg
     continue_config
-    # Step 2: Check for existing file
     check_config_file
-    # Step 3: Create config header
+
     create_config_header
-    # Step 4: Specify config file path.
-    specify_config_path
-    # Step 5: Specify log file path.
-    specify_log_path
-    # Step 6: Moonraker entry
+    specify_data_path
     add_moonraker_entry
-    # Step 7: Display finished message
+
     goodbye_msg
 }
 

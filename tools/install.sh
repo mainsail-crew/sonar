@@ -11,8 +11,6 @@
 # shellcheck enable=require-variable-braces
 # shellcheck disable=SC2317
 
-## disabeld SC2086 for some lines because there we want 'word splitting'
-
 # Exit on Errors
 set -Ee
 
@@ -86,7 +84,7 @@ cleanup() {
 
 err_exit() {
     if [[ "${1}" != "0" ]]; then
-        echo -e "ERROR: Error ${1} occured on line ${2}"
+        echo -e "ERROR: Error ${1} occurred on line ${2}"
         echo -e "ERROR: Stopping $(basename "$0")."
         echo -e "Goodbye..."
     fi
@@ -122,33 +120,21 @@ create_filestructure() {
 
 install_packages() {
     ### sonar Dependencies
-    PKGLIST="git crudini iputils-ping"
+    local pkglist=(iputils-ping)
 
     echo -e "Running apt update first ..."
     ### Run apt update
     sudo apt-get -q --allow-releaseinfo-change update
 
     echo -e "Installing 'sonar' Dependencies ..."
-    # shellcheck disable=SC2086
-    # disable because we want 'wordsplitting'
-    sudo apt-get install -q -y --no-install-recommends ${PKGLIST}
+    # shellcheck disable=SC2068
+    sudo apt-get install -q -y --no-install-recommends ${pkglist[@]}
 
     echo -e "Installing 'sonar' Dependencies ... [${CN_OK}]"
 }
 
 install_sonar() {
-    local bin_path config sonar_bin
-    bin_path="/usr/local/bin"
-    config="${SONAR_CONFIG_PATH}/sonar.conf"
-    sonar_bin="/home/${BASE_USER}/sonar/sonar"
-    # Link sonar to $PATH
-    echo -en "Linking sonar ...\r"
-    # Remove if exist!
-    if [[ -f /usr/local/bin/sonar ]]; then
-        rm -f /usr/local/bin/sonar
-    fi
-    sudo ln -sf "${sonar_bin}" "${bin_path}" > /dev/null
-    echo -e "Linking sonar ... [${CN_OK}]\r"
+    local config="${SONAR_CONFIG_PATH}/sonar.conf"
     # Install base line config
     # Make sure not overwrite existing!
     if [[ -f "${config}" ]]; then
@@ -162,34 +148,44 @@ install_sonar() {
         cp -f "${SONAR_DEFAULT_CONF}" "${config}" &> /dev/null
         echo -e "Copying sonar.conf ... [${CN_OK}]\r"
     fi
-    return 0
 }
 
 install_service_file() {
-    local servicefile systemd_dir
-    servicefile="${PWD}/resources/sonar.service"
+    local servicefile systemd_dir envfile
+    envfile="${SONAR_PATH}/resources/sonar.env"
+    servicefile="${SONAR_PATH}/resources/sonar.service"
     systemd_dir="/etc/systemd/system"
+
     echo -en "Install sonar.service file ...\r"
-    # Install Service file
     cp -f "${servicefile}" "${systemd_dir}"
+    sed -i "s|%envpath%|${SONAR_SYSTEMD_PATH}|g" "${systemd_dir}/sonar.service"
+    echo -e "Install sonar.service file ... [${CN_OK}]"
+
+    echo -en "Install sonar.env file ...\r"
+    cp -f "${envfile}" "${SONAR_SYSTEMD_PATH}"
+    sed -i "s|%sonarpath%|${SONAR_PATH}|g" "${SONAR_SYSTEMD_PATH}/sonar.env"
+    sed -i "s|%configpath%|${SONAR_CONFIG_PATH}|g" "${SONAR_SYSTEMD_PATH}/sonar.env"
+    echo -e "Install sonar.env file ... [${CN_OK}]"
 }
 
 install_logrotate() {
     local logrotatefile logpath
     logrotatefile="resources/logrotate_sonar"
     logpath="${SONAR_LOG_PATH}/sonar.log"
-    # generate pseudo link
+
+    echo -en "Generating Log Symlink ...\r"
     ln -sf /var/log/sonar.log "${logpath}"
-    # install logrotate
+    echo -e "Generating Log Symlink ... [${CN_OK}]\r"
+
     echo -en "Install logrotate file ...\r"
     cp -rf "${logrotatefile}" /etc/logrotate.d/sonar
-    echo -e "Install logrotate file ... [${CN_OK}]\r"
+    echo -e "Install logrotate file ... [${CN_OK}]"
 }
 
 add_update_entry() {
     local moonraker_conf
     moonraker_conf="${SONAR_CONFIG_PATH}/moonraker.conf"
-    moonraker_update="${PWD}/resources/moonraker_update.txt"
+    moonraker_update="${SONAR_PATH}/resources/moonraker_update.txt"
     echo -en "Adding Sonar Update Manager entry to moonraker.conf ...\r"
     if [[ -f "${moonraker_conf}" ]]; then
         if [[ "$(grep -c "sonar" "${moonraker_conf}")" != "0" ]]; then
@@ -210,6 +206,7 @@ add_update_entry() {
         fi
         echo -e "Adding Sonar Update Manager entry to moonraker.conf ... [${CN_OK}]"
     else
+        echo -e "Adding Sonar Update Manager entry to moonraker.conf ... [${CN_SK}]"
         echo -e "moonraker.conf is missing ... [${CN_SK}]"
     fi
 }
@@ -218,7 +215,7 @@ add_update_entry() {
 enable_service() {
     echo -en "Enable sonar.service on boot ...\r"
     sudo systemctl enable sonar.service &> /dev/null
-    echo -e "Enable sonar.service on boot ... [${CN_OK}]\r"
+    echo -e "Enable sonar.service on boot ... [${CN_OK}]"
 }
 
 ## start systemd service
@@ -268,7 +265,13 @@ main() {
     if [[ -n "${SONAR_DATA_PATH}" ]]; then
         SONAR_CONFIG_PATH="${SONAR_DATA_PATH}/config"
         SONAR_LOG_PATH="${SONAR_DATA_PATH}/logs"
+        SONAR_SYSTEMD_PATH="${SONAR_DATA_PATH}/systemd"
     fi
+
+    ## Get path of sonar
+    local script_path
+    script_path="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+    SONAR_PATH="$(dirname "${script_path}")"
 
     ## Make sure folders exist
     create_filestructure
@@ -282,13 +285,9 @@ main() {
     ## Step 4: Install service File
     install_service_file
 
-    ## Step 5: Enable service
-    if [[ -f /etc/systemd/system/sonar.service ]] &&
-    [[ "${SONAR_UNATTENDED}" = "0" ]]; then
-        enable_service
-    fi
-    ## If unattended skip start service
+    ## Step 5: Enable & start service
     if [[ "${SONAR_UNATTENDED}" = "0" ]]; then
+        enable_service
         start_service
     fi
 
@@ -300,9 +299,10 @@ main() {
         add_update_entry
     fi
 
+    goodbye_msg
+
     ## Step 8: Ask for reboot
     ## Skip if UNATTENDED
-    goodbye_msg
     if [[ "${SONAR_UNATTENDED}" = "0" ]]; then
         ask_reboot
     fi

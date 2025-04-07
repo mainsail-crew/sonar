@@ -18,7 +18,7 @@ WantedBy=multi-user.target
 
 [Service]
 Type=exec
-RemainAfterExit=Yes
-ExecStart=/usr/local/bin/sonar
+EnvironmentFile=%envpath%/sonar.env
+ExecStart=/usr/bin/python3 $SONAR_ARGS
 Restart=on-failure
 RestartSec=5
