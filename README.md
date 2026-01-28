@@ -47,9 +47,9 @@ section descriptor is crucial!**_
 
     enable: true
 
-If set to "false" service will exit on startup, use this option to disable Sonar
-service. It will restart on reboot but exiting as long you don't change it to
-"true".
+This setting is only evaluated at boot or when the service restarts. Set to 
+"false" to prevent Sonar from starting. It won't run until you change it back 
+to "true" and reboot or restart the service.
 
     debug_log: false
 
@@ -65,14 +65,13 @@ persistent!
 
     target: auto
 
-Your target defines which of your network devices should be the target of used
-`ping` command. You can use either IP Address or a URL. `auto` will ping your
-default gateway (router).
-**_INFO: Avoid using prefixes like https:// or http://_**
+Defines the ping target. Use an IP address, hostname, or 'auto' to automatically 
+ping your default gateway (router).
 
     count: 3
 
-Number of ping attempts.
+Number of pings per connection check. Multiple pings help avoid false positives 
+from brief network hiccups. A check is considered failed only if all pings fail.
 
     interval: 60
 
@@ -80,8 +79,7 @@ Sets interval in seconds, how long it should wait for next connection check.
 
     restart_threshold: 10
 
-Delay in seconds before attempting to restart the WiFi connection after a
-connection loss.
+Restart WiFi after this many consecutive failed pings.
 
 ---
 
