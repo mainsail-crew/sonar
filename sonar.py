@@ -131,7 +131,7 @@ class SonarDaemon:
 
     def get_default_gateway(self):
         # Regex pattern to extract gateway, device name, source IP, and metric
-        pattern = r'default via (\S+).*? dev (\S+).*?src (\S+).*?metric (\d+)'
+        pattern = r'default via (\S+)\s+dev (\S+)(?:.*?\bsrc (\S+))?(?:.*?\bmetric (\d+))?'
 
         try:
             route_output = subprocess.run(["ip", "route", "show", "default"],
@@ -151,14 +151,14 @@ class SonarDaemon:
                 self.logger.warning("No matching routes found.")
                 return None
 
-            # Sort matches by metric (ascending order)
-            matches.sort(key=lambda x: int(x[3]))
+            # Sort matches by metric (ascending; missing metric -> 0)
+            matches.sort(key=lambda x: int(x[3]) if x[3] else 0)
 
             return {
                 'gateway': matches[0][0],  # Gateway IP
                 'interface': matches[0][1],  # Device name (e.g., wlan0)
-                'src': matches[0][2],  # Source IP
-                'metric': int(matches[0][3])  # Metric value
+                'src': matches[0][2] or None,  # Source IP (absent on static routes)
+                'metric': int(matches[0][3]) if matches[0][3] else 0  # Metric (may be absent)
             }
         except Exception as e:
             self.logger.error(f"Error retrieving default gateway: {e}")
